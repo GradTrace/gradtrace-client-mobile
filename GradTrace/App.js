@@ -10,6 +10,7 @@ import HomeScreen from "./src/screens/Home";
 import TasksScreen from "./src/screens/Tasks";
 import ProfileScreen from "./src/screens/Profile";
 import AttendanceScreen from "./src/screens/Attendance";
+import ScanAttendance from "./src/screens/AttendanceScanQR";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -52,6 +53,11 @@ export default function App() {
         <Stack.Screen
           name="Register"
           component={RegisterScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ScanAttendance"
+          component={ScanAttendance}
           options={{ headerShown: false }}
         />
         <Stack.Screen
