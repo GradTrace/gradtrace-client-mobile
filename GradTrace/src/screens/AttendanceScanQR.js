@@ -5,7 +5,8 @@ import { Button } from "@rneui/themed";
 import * as Location from "expo-location";
 
 import axios from "axios";
-const url = "http://localhost:3000/students/attendance";
+// const url = "http://localhost:3000/students/attendance";
+const url = "https://bf12-111-94-112-45.ap.ngrok.io/students/attendance"; // link dinamis, tolong disesuaikan sama ngrok di masing2 pc (pastikan ngrok tetap running)
 
 export default function ScanAttendance({ navigation }) {
   const goToAttendance = () => {
@@ -16,12 +17,13 @@ export default function ScanAttendance({ navigation }) {
   const [userLocation, setUserLocation] = useState("");
   const [errorMsg, setErrorMsg] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const [dataQR, setDataQR] = useState("");
   const [text, setText] = useState("Not yet scanned");
   const [location, setLocation] = useState({});
 
-  useEffect(() => {
-    GetCurrentLocation();
-  }, []);
+  // useEffect(() => {
+  //   GetCurrentLocation();
+  // }, []);
 
   // Get current location
   async function GetCurrentLocation() {
@@ -54,7 +56,7 @@ export default function ScanAttendance({ navigation }) {
         const address = `${item.name}, ${item.street}, ${item.postalCode}, ${item.district}, ${item.city}, ${item.subregion}, ${item.region}, ${item.country}  Lat: ${latitude}, Long: ${longitude}, `;
 
         setUserLocation(address);
-        console.log(address);
+        // console.log(address);
       }
     }
   }
@@ -74,15 +76,44 @@ export default function ScanAttendance({ navigation }) {
     })();
   };
 
-  // Request for camera permission
   useEffect(() => {
+    GetCurrentLocation();
     askForCameraPermission();
   }, []);
 
   const handleBarCodeScanned = ({ type, data }) => {
+    // setScanned(true);
+    // setText(data);
+    // setDataQR(data);
+    // console.log(dataQR, "<< dataqr dari scan qr bosq");
+    // console.log(text, "<< text dari scan qr bosq");
+    console.log(`Type: ${type}, Data: ${data}`);
+
     setScanned(true);
     setText(data);
-    console.log(`Type: ${type}, Data: ${data}`);
+    postAttendance(data);
+    // async () => {
+    //   try {
+    //     console.log("masuk sini");
+    //     const result = await axios({
+    //       method: "POST",
+    //       url: data,
+    //       headers: {
+    //         access_token: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY1MDQxNTgxfQ.EBBxR9xSqva3WIi4Pwcoh3OTAcNn32umYm-SNJ0vwKs`,
+    //       },
+    //       data: {
+    //         // date and time sudah di handle di server, nanti pindahin kesini
+    //         // StudentId sudah dihandle di server
+    //         dateAndTime: new Date(),
+    //         lon: location.lon,
+    //         lat: location.lat,
+    //       },
+    //     });
+    //     console.log(result.data, "ini hasil");
+    //   } catch (err) {
+    //     console.log(err, "Error from post attendance");
+    //   }
+    // };
   };
 
   // Check for camera permission
@@ -106,18 +137,25 @@ export default function ScanAttendance({ navigation }) {
   }
 
   // Post attendance
-  async function postAttendance() {
+  async function postAttendance(data) {
     try {
       const result = await axios({
         method: "POST",
-        url: url,
+        url: data,
         headers: {
           access_token: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY1MDQxNTgxfQ.EBBxR9xSqva3WIi4Pwcoh3OTAcNn32umYm-SNJ0vwKs`,
         },
-        data: {},
+        data: {
+          // date and time sudah di handle di server, nanti pindahin kesini
+          // StudentId sudah dihandle di server
+          dateAndTime: new Date(),
+          lon: location.lon,
+          lat: location.lat,
+        },
       });
+      console.log(result.data, "ini hasil");
     } catch (err) {
-      console.log(err, "Error drom post attendance");
+      console.log(err, "Error from post attendance");
     }
   }
 
@@ -149,6 +187,7 @@ export default function ScanAttendance({ navigation }) {
           console.log(location);
         }}
       /> */}
+      {/* <Button title={"new attendance"} onPress={() => postAttendance()} /> */}
       <Text>{textLocation}</Text>
     </View>
   );
