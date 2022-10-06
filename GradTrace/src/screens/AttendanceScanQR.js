@@ -4,6 +4,8 @@ import { View, StyleSheet, Text } from "react-native";
 import { Button } from "@rneui/themed";
 import * as Location from "expo-location";
 
+import axios from "axios";
+const url = "http://localhost:3000/students/attendance";
 
 export default function ScanAttendance({ navigation }) {
   const goToAttendance = () => {
@@ -11,48 +13,60 @@ export default function ScanAttendance({ navigation }) {
   };
 
   const [hasPermission, setHasPermission] = useState(null);
-  const [userLocation, setUserLocation] = useState("")
+  const [userLocation, setUserLocation] = useState("");
   const [errorMsg, setErrorMsg] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [text, setText] = useState("Not yet scanned");
+  const [location, setLocation] = useState({});
 
+  useEffect(() => {
+    GetCurrentLocation();
+  }, []);
 
+  // Get current location
   async function GetCurrentLocation() {
     let { status } = await Location.requestForegroundPermissionsAsync();
 
-    if (status !== 'granted') {
-      setErrorMsg('Permission to access location was denied');
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
       return;
     }
 
-
     let { coords } = await Location.getCurrentPositionAsync();
-    console.log(coords, `<< ini hasil get curr pos async`)
+    // console.log(coords, `<< ini hasil get curr pos async`);
     if (coords) {
       const { latitude, longitude } = coords;
       let response = await Location.reverseGeocodeAsync({
         latitude,
         longitude,
       });
-      console.log(response, `<< ini response`)
+      // console.log(response, `<< ini response`);
+
+      // Set location
+      setLocation((prevState) => ({
+        ...prevState,
+        lon: longitude,
+        lat: latitude,
+      }));
+      // console.log(location);
 
       for (let item of response) {
-        let address = `${item.name}, ${item.street}, ${item.postalCode}, ${item.district}, ${item.city}, ${item.subregion}, ${item.region}, ${item.country}  Lat: ${latitude}, Long: ${longitude}, `;
+        const address = `${item.name}, ${item.street}, ${item.postalCode}, ${item.district}, ${item.city}, ${item.subregion}, ${item.region}, ${item.country}  Lat: ${latitude}, Long: ${longitude}, `;
 
         setUserLocation(address);
-        console.log(address)
+        console.log(address);
       }
     }
-  };
+  }
 
-  let textLocation = 'Waiting..';
+  let textLocation = "Waiting..";
   if (errorMsg) {
     textLocation = errorMsg;
   } else if (userLocation) {
     textLocation = JSON.stringify(userLocation);
   }
 
-
+  // QR scan
   const askForCameraPermission = () => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -91,13 +105,25 @@ export default function ScanAttendance({ navigation }) {
     );
   }
 
+  // Post attendance
+  async function postAttendance() {
+    try {
+      const result = await axios({
+        method: "POST",
+        url: url,
+        headers: {
+          access_token: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY1MDQxNTgxfQ.EBBxR9xSqva3WIi4Pwcoh3OTAcNn32umYm-SNJ0vwKs`,
+        },
+        data: {},
+      });
+    } catch (err) {
+      console.log(err, "Error drom post attendance");
+    }
+  }
+
   return (
     <View style={styles.container}>
-      <Button
-        title={"Back"}
-        onPress={goToAttendance}
-        style={styles.backButton}
-      />
+      <Button title={"Back"} onPress={goToAttendance} />
       <View style={styles.barcodebox}>
         <BarCodeScanner
           onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
@@ -110,7 +136,19 @@ export default function ScanAttendance({ navigation }) {
         <Button title={"Tap to Scan Again"} onPress={() => setScanned(false)} />
       )}
 
-      <Button title={"Tap to see Location"} onPress={() => GetCurrentLocation()} />
+      {location && (
+        <Text>
+          My current location = lon: {location.lon} lat: {location.lat}
+        </Text>
+      )}
+
+      {/* <Button
+        title={"Tap to see Location"}
+        onPress={() => {
+          GetCurrentLocation();
+          console.log(location);
+        }}
+      /> */}
       <Text>{textLocation}</Text>
     </View>
   );
@@ -123,7 +161,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  backButton: {},
   barcodebox: {
     alignItems: "center",
     justifyContent: "center",
