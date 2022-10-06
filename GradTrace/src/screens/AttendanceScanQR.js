@@ -21,10 +21,6 @@ export default function ScanAttendance({ navigation }) {
   const [text, setText] = useState("Not yet scanned");
   const [location, setLocation] = useState({});
 
-  // useEffect(() => {
-  //   GetCurrentLocation();
-  // }, []);
-
   // Get current location
   async function GetCurrentLocation() {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -82,38 +78,11 @@ export default function ScanAttendance({ navigation }) {
   }, []);
 
   const handleBarCodeScanned = ({ type, data }) => {
-    // setScanned(true);
-    // setText(data);
-    // setDataQR(data);
-    // console.log(dataQR, "<< dataqr dari scan qr bosq");
-    // console.log(text, "<< text dari scan qr bosq");
     console.log(`Type: ${type}, Data: ${data}`);
 
     setScanned(true);
     setText(data);
     postAttendance(data);
-    // async () => {
-    //   try {
-    //     console.log("masuk sini");
-    //     const result = await axios({
-    //       method: "POST",
-    //       url: data,
-    //       headers: {
-    //         access_token: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY1MDQxNTgxfQ.EBBxR9xSqva3WIi4Pwcoh3OTAcNn32umYm-SNJ0vwKs`,
-    //       },
-    //       data: {
-    //         // date and time sudah di handle di server, nanti pindahin kesini
-    //         // StudentId sudah dihandle di server
-    //         dateAndTime: new Date(),
-    //         lon: location.lon,
-    //         lat: location.lat,
-    //       },
-    //     });
-    //     console.log(result.data, "ini hasil");
-    //   } catch (err) {
-    //     console.log(err, "Error from post attendance");
-    //   }
-    // };
   };
 
   // Check for camera permission
@@ -146,8 +115,6 @@ export default function ScanAttendance({ navigation }) {
           access_token: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY1MDQxNTgxfQ.EBBxR9xSqva3WIi4Pwcoh3OTAcNn32umYm-SNJ0vwKs`,
         },
         data: {
-          // date and time sudah di handle di server, nanti pindahin kesini
-          // StudentId sudah dihandle di server
           dateAndTime: new Date(),
           lon: location.lon,
           lat: location.lat,
