@@ -37,7 +37,7 @@ export default function ScanAttendance({ navigation }) {
       console.log(response, `<< ini response`)
 
       for (let item of response) {
-        let address = `${item.name}, ${item.street}, ${item.postalCode}, ${item.city}, Lat: ${latitude}, Long: ${longitude}, `;
+        let address = `${item.name}, ${item.street}, ${item.postalCode}, ${item.district}, ${item.city}, ${item.subregion}, ${item.region}, ${item.country}  Lat: ${latitude}, Long: ${longitude}, `;
 
         setUserLocation(address);
         console.log(address)
