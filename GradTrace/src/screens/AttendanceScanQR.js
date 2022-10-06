@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { View, StyleSheet, Text } from "react-native";
 import { Button } from "@rneui/themed";
+import * as Location from "expo-location";
+
 
 export default function ScanAttendance({ navigation }) {
   const goToAttendance = () => {
@@ -9,8 +11,47 @@ export default function ScanAttendance({ navigation }) {
   };
 
   const [hasPermission, setHasPermission] = useState(null);
+  const [userLocation, setUserLocation] = useState("")
+  const [errorMsg, setErrorMsg] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [text, setText] = useState("Not yet scanned");
+
+
+  async function GetCurrentLocation() {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+
+    if (status !== 'granted') {
+      setErrorMsg('Permission to access location was denied');
+      return;
+    }
+
+
+    let { coords } = await Location.getCurrentPositionAsync();
+    console.log(coords, `<< ini hasil get curr pos async`)
+    if (coords) {
+      const { latitude, longitude } = coords;
+      let response = await Location.reverseGeocodeAsync({
+        latitude,
+        longitude,
+      });
+      console.log(response, `<< ini response`)
+
+      for (let item of response) {
+        let address = `${item.name}, ${item.street}, ${item.postalCode}, ${item.district}, ${item.city}, ${item.subregion}, ${item.region}, ${item.country}  Lat: ${latitude}, Long: ${longitude}, `;
+
+        setUserLocation(address);
+        console.log(address)
+      }
+    }
+  };
+
+  let textLocation = 'Waiting..';
+  if (errorMsg) {
+    textLocation = errorMsg;
+  } else if (userLocation) {
+    textLocation = JSON.stringify(userLocation);
+  }
+
 
   const askForCameraPermission = () => {
     (async () => {
@@ -68,6 +109,9 @@ export default function ScanAttendance({ navigation }) {
       {scanned && (
         <Button title={"Tap to Scan Again"} onPress={() => setScanned(false)} />
       )}
+
+      <Button title={"Tap to see Location"} onPress={() => GetCurrentLocation()} />
+      <Text>{textLocation}</Text>
     </View>
   );
 }
