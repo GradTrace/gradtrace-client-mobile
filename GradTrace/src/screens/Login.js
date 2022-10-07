@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, TextInput } from "react-native";
+import { View, StyleSheet, Text, TextInput, Alert } from "react-native";
 import { Button } from "@rneui/themed";
 import { useState } from "react";
 
@@ -30,8 +30,12 @@ export default function LoginScreen({ navigation }) {
 
       navigation.navigate("AppNavigator");
     } catch (err) {
-      console.log(err);
-      alert(err)
+      if (!textEmail || !textPassword) {
+        Alert.alert(`Error`, `email/password must be filled`)
+      }
+      else {
+        Alert.alert(`Error`, `Invalid email / password`)
+      }
     }
   };
 
@@ -83,6 +87,7 @@ const styles = StyleSheet.create({
 
   input: {
     height: 40,
+    width: 200,
     margin: 12,
     borderWidth: 1,
     padding: 10,
