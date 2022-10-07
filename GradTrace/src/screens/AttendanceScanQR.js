@@ -6,7 +6,7 @@ import * as Location from "expo-location";
 
 import axios from "axios";
 // const url = "http://localhost:3000/students/attendance";
-const url = "https://b713-111-94-112-45.ap.ngrok.io/students/attendance"; // link dinamis, tolong disesuaikan sama ngrok di masing2 pc (pastikan ngrok tetap running)
+// const url = "https://b713-111-94-112-45.ap.ngrok.io/students/attendance"; // link dinamis, tolong disesuaikan sama ngrok di masing2 pc (pastikan ngrok tetap running)
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 

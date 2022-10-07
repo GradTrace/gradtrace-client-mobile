@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { url } from "../../constants/url";
 
 export default function LoginScreen({ navigation }) {
   const [textEmail, setTextEmail] = useState("");
@@ -16,7 +17,7 @@ export default function LoginScreen({ navigation }) {
 
       const result = await axios({
         method: "POST",
-        url: `https://b713-111-94-112-45.ap.ngrok.io/students/login`,
+        url: `${url}/students/login`,
         data: {
           email: textEmail,
           password: textPassword,
@@ -30,6 +31,7 @@ export default function LoginScreen({ navigation }) {
       navigation.navigate("AppNavigator");
     } catch (err) {
       console.log(err);
+      alert(err)
     }
   };
 
