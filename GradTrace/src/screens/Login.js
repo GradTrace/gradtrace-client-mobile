@@ -17,7 +17,7 @@ export default function LoginScreen({ navigation }) {
 
       const result = await axios({
         method: "POST",
-        url: `https://7933-182-3-47-41.ap.ngrok.io/students/login`,
+        url: `${url}/students/login`,
         data: {
           email: textEmail,
           password: textPassword,
@@ -31,6 +31,7 @@ export default function LoginScreen({ navigation }) {
       navigation.navigate("AppNavigator");
     } catch (err) {
       console.log(err);
+      alert(err)
     }
   };
 
