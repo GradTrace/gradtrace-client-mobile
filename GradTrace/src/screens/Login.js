@@ -2,18 +2,50 @@ import { View, StyleSheet, Text, TextInput } from "react-native";
 import { Button } from "@rneui/themed";
 import { useState } from "react";
 
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 export default function LoginScreen({ navigation }) {
   const [textEmail, setTextEmail] = useState("");
   const [textPassword, setTextPassword] = useState("");
 
+  const loginHandler = async () => {
+    try {
+      console.log(textEmail, "<<< input email");
+      console.log(textPassword, "<<< input password");
 
+      const result = await axios({
+        method: "POST",
+        url: `https://b713-111-94-112-45.ap.ngrok.io/students/login`,
+        data: {
+          email: textEmail,
+          password: textPassword,
+        },
+      });
+      // console.log(result.data, "<<< hasil login axios");
+      storeData(result.data);
+      setTextEmail("");
+      setTextPassword("");
 
-  const goToHome = () => {
-    navigation.navigate("AppNavigator");
+      navigation.navigate("AppNavigator");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
+  // Navigate to register screen
   const goToRegister = () => {
     navigation.navigate("Register");
+  };
+
+  // Store access_token as object
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem("@storage_Key", jsonValue);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -33,7 +65,7 @@ export default function LoginScreen({ navigation }) {
         placeholder="Enter Password..."
       />
 
-      <Button title="Sign In" type="outline" onPress={goToHome} />
+      <Button title="Sign In" type="outline" onPress={loginHandler} />
       <Button title="Register" type="outline" onPress={goToRegister} />
     </View>
   );
@@ -53,5 +85,4 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
   },
-
 });
