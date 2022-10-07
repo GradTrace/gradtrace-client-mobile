@@ -6,18 +6,48 @@ import * as Location from "expo-location";
 
 import axios from "axios";
 // const url = "http://localhost:3000/students/attendance";
-const url = "https://bf12-111-94-112-45.ap.ngrok.io/students/attendance"; // link dinamis, tolong disesuaikan sama ngrok di masing2 pc (pastikan ngrok tetap running)
+const url = "https://b713-111-94-112-45.ap.ngrok.io/students/attendance"; // link dinamis, tolong disesuaikan sama ngrok di masing2 pc (pastikan ngrok tetap running)
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ScanAttendance({ navigation }) {
   const goToAttendance = () => {
     navigation.navigate("Attendance");
   };
 
+  const [accessToken, setAccessToken] = useState("");
+
+  // Get access_token
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("@storage_Key");
+      console.log(jsonValue, "<<< ini hasil get access token");
+
+      if (jsonValue) {
+        const result = JSON.parse(jsonValue);
+        // console.log(result, "<<< ini hasil Get Data di home");
+        setAccessToken(result.access_token);
+
+        // return result;
+      } else {
+        console.log("error");
+        // return null;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  console.log(accessToken, "<< access token");
+
   const [hasPermission, setHasPermission] = useState(null);
   const [userLocation, setUserLocation] = useState("");
   const [errorMsg, setErrorMsg] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [dataQR, setDataQR] = useState("");
   const [text, setText] = useState("Not yet scanned");
   const [location, setLocation] = useState({});
 
@@ -108,11 +138,12 @@ export default function ScanAttendance({ navigation }) {
   // Post attendance
   async function postAttendance(data) {
     try {
+      console.log(accessToken, "Ini access token dari post new attendance");
       const result = await axios({
         method: "POST",
         url: data,
         headers: {
-          access_token: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY1MDQxNTgxfQ.EBBxR9xSqva3WIi4Pwcoh3OTAcNn32umYm-SNJ0vwKs`,
+          access_token: accessToken,
         },
         data: {
           dateAndTime: new Date(),
@@ -146,15 +177,6 @@ export default function ScanAttendance({ navigation }) {
           My current location = lon: {location.lon} lat: {location.lat}
         </Text>
       )}
-
-      {/* <Button
-        title={"Tap to see Location"}
-        onPress={() => {
-          GetCurrentLocation();
-          console.log(location);
-        }}
-      /> */}
-      {/* <Button title={"new attendance"} onPress={() => postAttendance()} /> */}
       <Text>{textLocation}</Text>
     </View>
   );
