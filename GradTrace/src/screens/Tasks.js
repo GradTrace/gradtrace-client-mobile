@@ -1,4 +1,4 @@
-import { View, StyleSheet, ScrollView, Text } from "react-native";
+import { View, StyleSheet, ScrollView, FlatList } from "react-native";
 
 import TaskCard from "../components/TaskCard";
 
