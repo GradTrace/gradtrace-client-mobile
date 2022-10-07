@@ -1,21 +1,24 @@
 import { StyleSheet, View } from "react-native";
 import { Text, Card, Button, Avatar } from "@rneui/themed";
 
-export default function AttendanceCard() {
+export default function AttendanceCard({ item }) {
   return (
     <Card containerStyle={styles.cardContainer}>
       <View style={styles.card}>
         <View>
-          <Avatar
+          {/* <Avatar
             size={50}
             source={{
               uri: "https://cdn-icons-png.flaticon.com/512/591/591576.png",
             }}
-          />
+          /> */}
         </View>
         <View style={styles.content}>
-          <Text style={styles.date}>Mon, 12 Dec 2022</Text>
-          <Text style={styles.attendance}>Present</Text>
+          {/* <Text style={styles.date}>
+            {item.dateAndTime.toLocaleDateString("en-US")}
+          </Text> */}
+          <Text style={styles.date}>{item.dateAndTime}</Text>
+          <Text style={styles.attendance}>Masuk</Text>
         </View>
         <View style={{ marginStart: 12 }}>
           <Button title={"Detail"} />

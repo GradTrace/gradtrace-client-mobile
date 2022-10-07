@@ -1,48 +1,90 @@
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, Text, FlatList } from "react-native";
 import { Button } from "@rneui/themed";
+import { useState, useEffect } from "react";
 
 import AttendanceCard from "../components/AttendanceCard";
+
+import { url } from "../../constants/url";
+
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function AttendanceScreen({ navigation }) {
   const goToAttendanceScan = () => {
     navigation.navigate("ScanAttendance");
   };
 
-  return (
-    <>
-      <View style={styles.top}>
-        <Button
-          title="Scan QR"
-          onPress={goToAttendanceScan}
-          style={styles.scanButton}
-        />
+  const [accessToken, setAccessToken] = useState("");
+  const [attendances, setAttendances] = useState({});
+
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("@storage_Key");
+
+      if (jsonValue) {
+        const result = JSON.parse(jsonValue);
+        setAccessToken(result.access_token);
+        getAttendances(result.access_token);
+      } else {
+        console.log("error");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  // Get attendance data
+  const getAttendances = async (access_token) => {
+    try {
+      const result = await axios({
+        method: "GET",
+        url: `${url}/students/attendance`,
+        headers: {
+          access_token,
+        },
+      });
+      setAttendances(result.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const x = ({ item }) => <AttendanceCard item={item} />;
+
+  console.log(attendances, "<<<  attendances");
+
+  if (Object.keys(attendances).length === 0) {
+    return (
+      <View>
+        <Text>Loading...</Text>
       </View>
-      <View style={styles.container}>
-        <ScrollView
-          style={styles.scrollview}
-          contentContainerStyle={{
-            width: "100%",
-            paddingTop: 2,
-            paddingBottom: 20,
-            paddingHorizontal: 21,
-          }}
-        >
-          <AttendanceCard />
-          <AttendanceCard />
-          <AttendanceCard />
-          <AttendanceCard />
-          <AttendanceCard />
-          <AttendanceCard />
-          <AttendanceCard />
-          <AttendanceCard />
-          <AttendanceCard />
-          <AttendanceCard />
-          <AttendanceCard />
-          <AttendanceCard />
-        </ScrollView>
-      </View>
-    </>
-  );
+    );
+  } else {
+    return (
+      <>
+        <View style={styles.top}>
+          <Button
+            title="Scan QR"
+            onPress={goToAttendanceScan}
+            style={styles.scanButton}
+          />
+        </View>
+        <View style={styles.container}>
+          <FlatList
+            data={attendances}
+            renderItem={x}
+            keyExtractor={(item) => item.id}
+            style={styles.scrollview}
+            contentContainerStyle={styles.containerStyle}
+          />
+        </View>
+      </>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -60,6 +102,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  containerStyle: {
+    width: "100%",
+    paddingTop: 2,
+    paddingBottom: 20,
+    paddingHorizontal: 21,
   },
   scrollview: {
     backgroundColor: "lightgrey",
