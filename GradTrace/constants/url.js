@@ -1,1 +1,1 @@
-export const url = "https://a2d6-140-213-16-160.ap.ngrok.io"; // link dinamis, tolong disesuaikan sama ngrok di masing2 pc (pastikan ngrok tetap running)
+export const url = "https://6326-111-94-112-151.ap.ngrok.io"; // link dinamis, tolong disesuaikan sama ngrok di masing2 pc (pastikan ngrok tetap running)
