@@ -6,11 +6,10 @@ import * as Location from "expo-location";
 
 import axios from "axios";
 // const url = "http://localhost:3000/students/attendance";
-// const url = "https://b713-111-94-112-45.ap.ngrok.io/students/attendance"; // link dinamis, tolong disesuaikan sama ngrok di masing2 pc (pastikan ngrok tetap running)
+// const url = "https://a3d2-111-94-112-45.ap.ngrok.io/students/attendance"; // link dinamis, tolong disesuaikan sama ngrok di masing2 pc (pastikan ngrok tetap running)
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { distKM } from "../../helpers/calculateRadiusRange";
-
 
 export default function ScanAttendance({ navigation }) {
   const goToAttendance = () => {
@@ -72,16 +71,24 @@ export default function ScanAttendance({ navigation }) {
         longitude,
       });
 
-      const latitudeSchool = -6.36264  // ini data dinamis, tolong sesuain. ni di depok jir
-      const longitudeSchool = 106.832034 // ini data dinamis, tolong sesuai in. ni di depok jir
+      // const latitudeSchool = -6.36264  // ini data depok
+      // const longitudeSchool = 106.832034 // ini data depok
 
-      const limitMax100mLoc = 0.2 //max 200 m
-      const resultDistanceInKm = distKM(latitudeSchool, longitudeSchool, latitude, longitude)
+      const latitudeSchool = -6.2523764; // ini data bintaro
+      const longitudeSchool = 106.6782908; // ini data bintaro
+
+      const limitMax100mLoc = 0.2; //max 200 m
+      const resultDistanceInKm = distKM(
+        latitudeSchool,
+        longitudeSchool,
+        latitude,
+        longitude
+      );
 
       if (resultDistanceInKm > limitMax100mLoc) {
-        console.log('kejauhan')
-        goToAttendance()
-        Alert.alert(`Kejauhan`, 'Jarak anda cukup jauh. tolong dekatlah')
+        console.log("kejauhan");
+        goToAttendance();
+        Alert.alert(`Kejauhan`, "Jarak anda cukup jauh. tolong dekatlah");
       }
       // Set location
       setLocation((prevState) => ({

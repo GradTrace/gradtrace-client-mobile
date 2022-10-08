@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 import { Text, Card, Avatar, Button } from "@rneui/themed";
 
-export default function TaskCard() {
+export default function TaskCard({ item }) {
   return (
     <Card containerStyle={styles.cardContainer}>
       <View style={styles.card}>
@@ -9,16 +9,20 @@ export default function TaskCard() {
           <Avatar
             size={50}
             source={{
-              uri: "https://cdn-icons-png.flaticon.com/512/2941/2941552.png",
+              uri: item.Course.icon,
             }}
           />
         </View>
         <View style={styles.content}>
-          <Text style={styles.subject}>Biology</Text>
-          <Text style={styles.deadline}>Deadline: 5 Sept 2022</Text>
+          <Text style={styles.subject}>{item.Course.name}</Text>
+          <Text style={styles.deadline}>Deadline: {item.deadline}</Text>
         </View>
         <View style={{ marginStart: 12 }}>
-          <Button title={"Submit"} />
+          {item.AssignmentGrades[0].url === "none" ? (
+            <Button title={"Submit"} />
+          ) : (
+            <Text>Submitted</Text>
+          )}
         </View>
       </View>
     </Card>
