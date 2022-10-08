@@ -1,6 +1,7 @@
 import { View, StyleSheet, Text, FlatList } from "react-native";
 import { Button } from "@rneui/themed";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
 import AttendanceCard from "../components/AttendanceCard";
 
@@ -33,9 +34,16 @@ export default function AttendanceScreen({ navigation }) {
     }
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
+
+  // Pakai useFocusEffect untuk "melakukan useEffect" saat terjadi perpindahan screen (atau dalam kata lain pindah dari focused screen jadi unfocused screen)
+  useFocusEffect(
+    useCallback(() => {
+      getData();
+    }, [])
+  );
 
   // Get attendance data
   const getAttendances = async (access_token) => {
@@ -53,7 +61,7 @@ export default function AttendanceScreen({ navigation }) {
     }
   };
 
-  const x = ({ item }) => <AttendanceCard item={item} />;
+  const card = ({ item }) => <AttendanceCard item={item} />;
 
   console.log(attendances, "<<<  attendances");
 
@@ -67,11 +75,7 @@ export default function AttendanceScreen({ navigation }) {
             style={styles.scanButton}
           />
         </View>
-        <View>
-          <Text>Loading...</Text>
-        </View>
       </>
-
     );
   } else {
     return (
@@ -86,7 +90,7 @@ export default function AttendanceScreen({ navigation }) {
         <View style={styles.container}>
           <FlatList
             data={attendances}
-            renderItem={x}
+            renderItem={card}
             keyExtractor={(item) => item.id}
             style={styles.scrollview}
             contentContainerStyle={styles.containerStyle}

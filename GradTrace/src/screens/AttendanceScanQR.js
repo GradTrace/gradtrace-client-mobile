@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { View, StyleSheet, Text, Alert } from "react-native";
+
 import { Button } from "@rneui/themed";
 import * as Location from "expo-location";
 
@@ -17,12 +18,18 @@ export default function ScanAttendance({ navigation }) {
   };
 
   const [accessToken, setAccessToken] = useState("");
+  const [hasPermission, setHasPermission] = useState(null);
+  const [userLocation, setUserLocation] = useState("");
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [scanned, setScanned] = useState(false);
+  const [text, setText] = useState("Not yet scanned");
+  const [location, setLocation] = useState({});
 
   // Get access_token
   const getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("@storage_Key");
-      console.log(jsonValue, "<<< ini hasil get access token");
+      // console.log(jsonValue, "<<< ini hasil get access token");
 
       if (jsonValue) {
         const result = JSON.parse(jsonValue);
@@ -43,14 +50,9 @@ export default function ScanAttendance({ navigation }) {
     getData();
   }, []);
 
-  console.log(accessToken, "<< access token");
+  // console.log(accessToken, "<< access token");
 
-  const [hasPermission, setHasPermission] = useState(null);
-  const [userLocation, setUserLocation] = useState("");
-  const [errorMsg, setErrorMsg] = useState(null);
-  const [scanned, setScanned] = useState(false);
-  const [text, setText] = useState("Not yet scanned");
-  const [location, setLocation] = useState({});
+  //! cari cara agar bisa langsung scan qr lagi saat berubah dari nonaktif ke aktif
 
   // Get current location
   async function GetCurrentLocation() {
@@ -58,11 +60,11 @@ export default function ScanAttendance({ navigation }) {
 
     if (status !== "granted") {
       setErrorMsg("Permission to access location was denied");
+      // console.log("Please activate yor location");
       return;
     }
 
     let { coords } = await Location.getCurrentPositionAsync();
-    // console.log(coords, `<< ini hasil get curr pos async`);
     if (coords) {
       const { latitude, longitude } = coords;
 
@@ -71,13 +73,13 @@ export default function ScanAttendance({ navigation }) {
         longitude,
       });
 
-      // const latitudeSchool = -6.36264  // ini data depok
-      // const longitudeSchool = 106.832034 // ini data depok
+      // const latitudeSchool = -6.36264; // ini data depok
+      // const longitudeSchool = 106.832034; // ini data depok
 
       const latitudeSchool = -6.2523764; // ini data bintaro
       const longitudeSchool = 106.6782908; // ini data bintaro
 
-      const limitMax100mLoc = 0.2; //max 200 m
+      const limitMax200mLoc = 0.2; //max 200 m
       const resultDistanceInKm = distKM(
         latitudeSchool,
         longitudeSchool,
@@ -85,10 +87,9 @@ export default function ScanAttendance({ navigation }) {
         longitude
       );
 
-      if (resultDistanceInKm > limitMax100mLoc) {
-        console.log("kejauhan");
+      if (resultDistanceInKm > limitMax200mLoc) {
         goToAttendance();
-        Alert.alert(`Kejauhan`, "Jarak anda cukup jauh. tolong dekatlah");
+        Alert.alert(`Error`, "You need to get closer to to your school");
       }
       // Set location
       setLocation((prevState) => ({
@@ -172,8 +173,10 @@ export default function ScanAttendance({ navigation }) {
         },
       });
       console.log(result.data, "ini hasil");
+      navigation.navigate("Attendance");
     } catch (err) {
       console.log(err, "Error from post attendance");
+      Alert.alert("Error", err.response.data.message);
     }
   }
 
@@ -203,8 +206,13 @@ export default function ScanAttendance({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  top: {
     flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  container: {
+    flex: 15,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
