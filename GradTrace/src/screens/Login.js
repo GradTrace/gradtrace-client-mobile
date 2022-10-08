@@ -30,12 +30,7 @@ export default function LoginScreen({ navigation }) {
 
       navigation.navigate("AppNavigator");
     } catch (err) {
-      if (!textEmail || !textPassword) {
-        Alert.alert(`Error`, `email/password must be filled`)
-      }
-      else {
-        Alert.alert(`Error`, `Invalid email / password`)
-      }
+      Alert.alert('Error', err.response.data.message)
     }
   };
 

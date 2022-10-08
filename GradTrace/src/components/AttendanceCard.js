@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import { Text, Card, Button, Avatar } from "@rneui/themed";
-
+import moment from 'moment'
 export default function AttendanceCard({ item }) {
   return (
     <Card containerStyle={styles.cardContainer}>
@@ -17,7 +17,7 @@ export default function AttendanceCard({ item }) {
           {/* <Text style={styles.date}>
             {item.dateAndTime.toLocaleDateString("en-US")}
           </Text> */}
-          <Text style={styles.date}>{item.dateAndTime}</Text>
+          <Text style={styles.date}>{moment(item.dateAndTime).format('dddd, Do MMMM YYYY')}</Text>
           <Text style={styles.attendance}>Masuk</Text>
         </View>
         <View style={{ marginStart: 12 }}>

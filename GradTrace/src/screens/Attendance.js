@@ -59,9 +59,19 @@ export default function AttendanceScreen({ navigation }) {
 
   if (Object.keys(attendances).length === 0) {
     return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
+      <>
+        <View style={styles.top}>
+          <Button
+            title="Scan QR"
+            onPress={goToAttendanceScan}
+            style={styles.scanButton}
+          />
+        </View>
+        <View>
+          <Text>Loading...</Text>
+        </View>
+      </>
+
     );
   } else {
     return (
