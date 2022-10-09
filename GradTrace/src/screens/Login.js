@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, TextInput, Alert } from "react-native";
+import { View, StyleSheet, Text, TextInput, Alert, Image } from "react-native";
 import { Button } from "@rneui/themed";
 import { useState } from "react";
 
@@ -6,14 +6,16 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { url } from "../../constants/url";
 
+import logo from "../../assets/GradTrace-logo.png";
+
 export default function LoginScreen({ navigation }) {
   const [textEmail, setTextEmail] = useState("");
   const [textPassword, setTextPassword] = useState("");
 
   const loginHandler = async () => {
     try {
-      console.log(textEmail, "<<< input email");
-      console.log(textPassword, "<<< input password");
+      // console.log(textEmail, "<<< input email");
+      // console.log(textPassword, "<<< input password");
 
       const result = await axios({
         method: "POST",
@@ -30,7 +32,7 @@ export default function LoginScreen({ navigation }) {
 
       navigation.navigate("AppNavigator");
     } catch (err) {
-      Alert.alert('Error', err.response.data.message)
+      Alert.alert("Error", err.response.data.message);
     }
   };
 
@@ -51,6 +53,7 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <Image source={logo} style={styles.logo} />
       <Text>Login</Text>
       <TextInput
         style={styles.input}
@@ -75,16 +78,20 @@ export default function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "lightblue",
     alignItems: "center",
     justifyContent: "center",
   },
-
   input: {
     height: 40,
     width: 200,
     margin: 12,
     borderWidth: 1,
     padding: 10,
+  },
+  logo: {
+    width: 340,
+    height: 90,
+    marginBottom: 15,
   },
 });
