@@ -1,7 +1,14 @@
 import { StyleSheet, View } from "react-native";
 import { Text, Card, Avatar, Button } from "@rneui/themed";
+import moment from "moment";
 
-export default function TaskCard({ item }) {
+export default function TaskCard({ item, navigation }) {
+  const goToUpload = () => {
+    navigation.navigate("Upload", {
+      id: item.id,
+    });
+  };
+
   return (
     <Card containerStyle={styles.cardContainer}>
       <View style={styles.card}>
@@ -15,15 +22,20 @@ export default function TaskCard({ item }) {
         </View>
         <View style={styles.content}>
           <Text style={styles.subject}>{item.Course.name}</Text>
-          <Text style={styles.deadline}>Deadline: {item.deadline}</Text>
+          <Text>{item.name}</Text>
+          <Text style={styles.deadline}>
+            Deadline: {moment(item.deadline).format("dddd, Do MMMM YYYY")}
+          </Text>
         </View>
-        <View style={{ marginStart: 12 }}>
+        {/* <View style={{ marginStart: 12 }}>
           {item.AssignmentGrades[0].url === "none" ? (
             <Button title={"Submit"} />
           ) : (
             <Text>Submitted</Text>
           )}
-        </View>
+        </View> */}
+        <Text>{item.AssignmentGrades.url}</Text>
+        <Button title={"submit"} onPress={() => goToUpload()} />
       </View>
     </Card>
   );

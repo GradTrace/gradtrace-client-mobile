@@ -8,7 +8,7 @@ import { url } from "../../constants/url";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function TasksScreen({ navigation }) {
+export default function TasksScreen({ navigation, route }) {
   const [accessToken, setAccessToken] = useState("");
   const [tasks, setTasks] = useState({});
 
@@ -50,7 +50,7 @@ export default function TasksScreen({ navigation }) {
     }
   };
 
-  const card = ({ item }) => <TaskCard item={item} />;
+  const card = ({ item }) => <TaskCard item={item} navigation={navigation} />;
   console.log(tasks, "<< ini tasks");
   return (
     <View style={styles.container}>
@@ -68,6 +68,13 @@ export default function TasksScreen({ navigation }) {
         data={tasks}
         renderItem={card}
         keyExtractor={(item) => item.id}
+        // contentContainerStyle={{
+        //   width: "100%",
+        //   paddingTop: 2,
+        //   paddingBottom: 20,
+        //   paddingHorizontal: 19,
+        // }}
+        style={styles.scrollview}
       />
       {/* </ScrollView> */}
     </View>

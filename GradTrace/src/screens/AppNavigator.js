@@ -6,7 +6,7 @@ import HomeScreen from "./Home";
 import TasksScreen from "./Tasks";
 import AttendanceScreen from "./Attendance";
 import ProfileScreen from "./Profile";
-import UploadTaskPage from "./UploadTaskPage";
+// import UploadTaskPage from "./UploadTaskPage";
 
 const Tab = createBottomTabNavigator();
 
@@ -24,10 +24,10 @@ export default function AppNavigator({ navigation }) {
             iconName = focused ? "calendar" : "calendar-outline";
           } else if (route.name === "Profile") {
             iconName = focused ? "person" : "person-outline";
-          } else if (route.name === "Upload") {
-            iconName = focused ? "file-tray-full" : "file-tray-full-outline";
           }
-
+          // else if (route.name === "Upload") {
+          //   iconName = focused ? "file-tray-full" : "file-tray-full-outline";
+          // }
 
           return <IonIcons name={iconName} size={size} color={color} />;
         },
@@ -54,7 +54,7 @@ export default function AppNavigator({ navigation }) {
           ),
         }}
       />
-      <Tab.Screen name="Upload" component={UploadTaskPage} />
+      {/* <Tab.Screen name="Upload" component={UploadTaskPage} /> */}
     </Tab.Navigator>
   );
 }
