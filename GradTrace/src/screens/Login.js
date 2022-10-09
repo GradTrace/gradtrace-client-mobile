@@ -12,11 +12,14 @@ export default function LoginScreen({ navigation }) {
   const [textEmail, setTextEmail] = useState("");
   const [textPassword, setTextPassword] = useState("");
 
+  // Navigate to register screen
+  const goToRegister = () => {
+    navigation.navigate("Register");
+  };
+
+  // Login handler
   const loginHandler = async () => {
     try {
-      // console.log(textEmail, "<<< input email");
-      // console.log(textPassword, "<<< input password");
-
       const result = await axios({
         method: "POST",
         url: `${url}/students/login`,
@@ -25,20 +28,13 @@ export default function LoginScreen({ navigation }) {
           password: textPassword,
         },
       });
-      // console.log(result.data, "<<< hasil login axios");
       storeData(result.data);
       setTextEmail("");
       setTextPassword("");
-
       navigation.navigate("AppNavigator");
     } catch (err) {
-      Alert.alert("Error", err.response.data.message);
+      Alert.alert("Sign In Error", err.response.data.message);
     }
-  };
-
-  // Navigate to register screen
-  const goToRegister = () => {
-    navigation.navigate("Register");
   };
 
   // Store access_token as object
@@ -47,6 +43,7 @@ export default function LoginScreen({ navigation }) {
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem("@storage_Key", jsonValue);
     } catch (err) {
+      Alert.alert("Error", err);
       console.log(err);
     }
   };
@@ -54,23 +51,47 @@ export default function LoginScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Image source={logo} style={styles.logo} />
-      <Text>Login</Text>
       <TextInput
         style={styles.input}
         onChangeText={setTextEmail}
         value={textEmail}
-        placeholder="Enter Email..."
+        placeholder="Enter your email"
       />
       <TextInput
         style={styles.input}
         onChangeText={setTextPassword}
         value={textPassword}
         secureTextEntry={true}
-        placeholder="Enter Password..."
+        placeholder="Enter your password"
       />
-
-      <Button title="Sign In" type="outline" onPress={loginHandler} />
-      <Button title="Register" type="outline" onPress={goToRegister} />
+      <Button
+        title="Sign In"
+        titleStyle={{ fontSize: 18 }}
+        onPress={loginHandler}
+        buttonStyle={{
+          backgroundColor: "black",
+          borderRadius: 10,
+        }}
+        containerStyle={{
+          width: 90,
+          marginHorizontal: 10,
+          marginVertical: 10,
+        }}
+      />
+      <View style={{ marginTop: 10, alignItems: "center" }}>
+        <Text style={{ fontSize: 16 }}>Don't have an account yet?</Text>
+        <Text
+          onPress={goToRegister}
+          style={{
+            fontSize: 16,
+            marginTop: 5,
+            color: "darkblue",
+            textDecorationLine: "underline",
+          }}
+        >
+          Register here
+        </Text>
+      </View>
     </View>
   );
 }
@@ -83,11 +104,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   input: {
-    height: 40,
-    width: 200,
+    height: 50,
+    width: 250,
     margin: 12,
     borderWidth: 1,
     padding: 10,
+    borderRadius: 10,
+    fontSize: 16,
   },
   logo: {
     width: 340,
