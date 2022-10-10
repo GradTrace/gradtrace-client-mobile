@@ -10,5 +10,7 @@ npm-debug.*
 *.orig.*
 web-build/
 
+sandbox.js
+
 # macOS
 .DS_Store

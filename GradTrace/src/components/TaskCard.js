@@ -6,6 +6,7 @@ export default function TaskCard({ item, navigation }) {
   const goToUpload = () => {
     navigation.navigate("Upload", {
       id: item.id,
+      url: item.AssignmentGrades[0].url,
     });
   };
 

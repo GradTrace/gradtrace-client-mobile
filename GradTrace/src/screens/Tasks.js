@@ -1,5 +1,6 @@
 import { View, StyleSheet, ScrollView, FlatList } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
 import TaskCard from "../components/TaskCard";
 
@@ -28,9 +29,15 @@ export default function TasksScreen({ navigation, route }) {
     }
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getData();
+    }, [])
+  );
+
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
   // Get tasks data
   const getTasks = async (access_token) => {
