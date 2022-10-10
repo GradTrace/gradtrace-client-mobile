@@ -9,11 +9,10 @@ import {
 import { FontAwesome5 } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
 import { useState, useEffect } from "react";
-// import { UploadFile } from "../../Core/fileUpload";
 import { LogBox } from "react-native";
 import SuccessScreen from "../components/successScreen";
 
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { ref, getDownloadURL, uploadBytesResumable, deleteObject } from "firebase/storage";
 import { storage } from "../../Core/config";
 
 import axios from "axios";
@@ -33,7 +32,7 @@ export default function UploadTaskPage({ navigation, route }) {
   const [accessToken, setAccessToken] = useState("");
 
   // Upload File Firebase
-  const UploadFile = (blobFile, fileName, isUploadCompleted) => {
+  const uploadFileToFirebase = (blobFile, fileName, isUploadCompleted) => {
     if (!blobFile) return;
     const sotrageRef = ref(storage, `myDocs/${fileName}`);
     const uploadTask = uploadBytesResumable(sotrageRef, blobFile);
@@ -52,6 +51,22 @@ export default function UploadTaskPage({ navigation, route }) {
       }
     );
   };
+
+  const deleteFileFromFirebase = (fileNameFirebase) => {
+    // Create a reference to the file to delete
+
+    const desertRef = ref(storage, `myDocs/${fileNameFirebase}`);
+
+    // Delete the file
+    deleteObject(desertRef).then(() => {
+      // File deleted successfully
+      console.log(`ini masok ke berhasil delet`)
+    }).catch((error) => {
+      // Uh-oh, an error occurred!
+      console.log(error, `<< ini eror message kalo gagal delet`)
+    });
+
+  }
 
   //HOOKS
   useEffect(() => {
@@ -81,24 +96,15 @@ export default function UploadTaskPage({ navigation, route }) {
     setIsChoosed(false);
   };
 
-  const uploadFile = () => {
+  const uploadFilePress = () => {
     if (blobFile) {
       showToastWithGravityAndOffset("Uploading File....");
       setUploadStart(true);
 
-      UploadFile(blobFile, fileName, isUploadCompleted);
+      uploadFileToFirebase(blobFile, fileName, isUploadCompleted);
 
-      seturlfirebasegained(UploadFile(blobFile, fileName, isUploadCompleted));
+      seturlfirebasegained(uploadFileToFirebase(blobFile, fileName, isUploadCompleted));
 
-      // console.log(
-      //   UploadFile(blobFile, fileName, isUploadCompleted),
-      //   "<<< hasil upload"
-      // );
-
-      // seturlfirebasegained(UploadFile(blobFile, fileName, isUploadCompleted)); // masih nge bug set url gained, padahal di folder fileuplod ada keterangan url nya.
-
-      // updateTaskUrl(accessToken);
-      // console.log();
       clearFiles();
     }
   };
@@ -142,8 +148,6 @@ export default function UploadTaskPage({ navigation, route }) {
           access_token,
         },
         data: {
-          // url: urlfirebasegained,
-          // url: UploadFile(blobFile, fileName, isUploadCompleted),
           url: urlfirebasegained,
         },
       });
@@ -169,13 +173,14 @@ export default function UploadTaskPage({ navigation, route }) {
       ) : (
         <>
           <Text>Ini IDnya: {route.params.id}</Text>
-
+          <Button onPress={() => deleteFileFromFirebase('1601376263809.jpg')} title="Delete File" />
+          <Button onPress={() => pickDocument()} title="Upload File" />
           <Text style={styles.textStyle}>{fileName}</Text>
           <View style={styles.btnContainer}>
             {isChoosed ? (
               <TouchableOpacity
                 style={styles.btnStyle}
-                onPress={() => uploadFile()}
+                onPress={() => uploadFilePress()}
               >
                 <Text style={styles.btnTextStyle}>Upload</Text>
               </TouchableOpacity>
@@ -186,7 +191,6 @@ export default function UploadTaskPage({ navigation, route }) {
             <TouchableOpacity onPress={() => pickDocument()}>
               <FontAwesome5 name="file-upload" size={60} color="black" />
             </TouchableOpacity>
-            <Button onPress={() => pickDocument()} title="Upload File" />
           </View>
         </>
       )}
