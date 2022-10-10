@@ -48,7 +48,14 @@ export default function TaskCard({ item, navigation }) {
       StudentId,
     });
   };
+
+  console.log(item, `<< ni hasil item`)
+  const now = new Date().getTime()
+  console.log(now, `<< now ini`)
+  console.log(new Date(item.deadline).getTime(), `<< ini deadline frmat ny`)
+
   // console.log(accessToken, "ini access token");
+
   return (
     <Card containerStyle={styles.cardContainer}>
       <View style={styles.card}>
@@ -69,6 +76,7 @@ export default function TaskCard({ item, navigation }) {
         </View>
 
         {/* <View style={{ marginStart: 12 }}>
+
           {item.AssignmentGrades[0].url === "none" ? (
             <Button title={"Submit"} />
           ) : (
@@ -76,10 +84,12 @@ export default function TaskCard({ item, navigation }) {
           )}
         </View> */}
         {/* <Text>{item.AssignmentGrades.url}</Text> */}
-        <Button title={"submit"} onPress={() => goToUpload()} />
+        {now >= new Date(item.deadline).getTime() ? null : <Button title={"submit"} onPress={() => goToUpload()} />}
+
       </View>
     </Card>
   );
+
 }
 
 const styles = StyleSheet.create({
