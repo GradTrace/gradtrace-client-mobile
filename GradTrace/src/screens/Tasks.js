@@ -35,10 +35,6 @@ export default function TasksScreen({ navigation, route }) {
     }, [])
   );
 
-  // useEffect(() => {
-  //   getData();
-  // }, []);
-
   // Get tasks data
   const getTasks = async (access_token) => {
     try {
@@ -51,19 +47,22 @@ export default function TasksScreen({ navigation, route }) {
       });
 
       setTasks(result.data);
-      console.log(result.data, "<< hasil axios");
+      // console.log(result.data, "<< hasil axios");
     } catch (err) {
       console.log(err);
     }
   };
 
   const card = ({ item }) => <TaskCard item={item} navigation={navigation} />;
+
   console.log(tasks, "<< ini tasks");
 
   // bikin state loading sndiri
   if (tasks.length === 0) {
     return <Text> No Task </Text>
   }
+
+  // console.log(tasks, "<< ini tasks");
 
   return (
     <View style={styles.container}>
@@ -76,20 +75,19 @@ export default function TasksScreen({ navigation, route }) {
           paddingHorizontal: 19,
         }}
       > */}
-      {/* <TaskCard /> */}
+
       <FlatList
         data={tasks}
         renderItem={card}
         keyExtractor={(item) => item.id}
-        // contentContainerStyle={{
-        //   width: "100%",
-        //   paddingTop: 2,
-        //   paddingBottom: 20,
-        //   paddingHorizontal: 19,
-        // }}
+        contentContainerStyle={{
+          width: "100%",
+          paddingTop: 2,
+          paddingBottom: 20,
+          paddingHorizontal: 19,
+        }}
         style={styles.scrollview}
       />
-      {/* </ScrollView> */}
     </View>
   );
 }

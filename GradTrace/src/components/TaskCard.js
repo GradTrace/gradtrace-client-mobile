@@ -1,18 +1,60 @@
 import { StyleSheet, View } from "react-native";
 import { Text, Card, Avatar, Button } from "@rneui/themed";
+import { useState, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment";
 
 export default function TaskCard({ item, navigation }) {
+  const [StudentId, setStudentId] = useState("");
+
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("@storage_Key");
+
+      if (jsonValue) {
+        const result = JSON.parse(jsonValue);
+        setStudentId(result.StudentId);
+      } else {
+        console.log("error");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      getData();
+    }, [])
+  );
+
+  // const StudentId = 1;
+
+  let url = "none";
+  item.AssignmentGrades.map((el) => {
+    if (el.StudentId === StudentId && el.AssignmentId === item.id) {
+      url = el.url;
+    }
+    return url;
+  });
+  // console.log(url, "ini TOT");
+
   const goToUpload = () => {
     navigation.navigate("Upload", {
       id: item.id,
-      url: item.AssignmentGrades[0].url,
+      url,
+      StudentId,
     });
   };
+
   console.log(item, `<< ni hasil item`)
   const now = new Date().getTime()
   console.log(now, `<< now ini`)
   console.log(new Date(item.deadline).getTime(), `<< ini deadline frmat ny`)
+
+  // console.log(accessToken, "ini access token");
 
   return (
     <Card containerStyle={styles.cardContainer}>
@@ -32,14 +74,16 @@ export default function TaskCard({ item, navigation }) {
             Deadline: {moment(item.deadline).format("dddd, Do MMMM YYYY")}
           </Text>
         </View>
+
         {/* <View style={{ marginStart: 12 }}>
-            {item.AssignmentGrades[0].url === "none" ? (
-              <Button title={"Submit"} />
-            ) : (
-              <Text>Submitted</Text>
-            )}
-          </View> */}
-        <Text>{item.AssignmentGrades.url}</Text>
+
+          {item.AssignmentGrades[0].url === "none" ? (
+            <Button title={"Submit"} />
+          ) : (
+            <Text>Submitted</Text>
+          )}
+        </View> */}
+        {/* <Text>{item.AssignmentGrades.url}</Text> */}
         {now >= new Date(item.deadline).getTime() ? null : <Button title={"submit"} onPress={() => goToUpload()} />}
 
       </View>

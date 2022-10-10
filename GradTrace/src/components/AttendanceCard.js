@@ -21,11 +21,11 @@ export default function AttendanceCard({ item }) {
           <Text style={styles.date}>
             {moment(item.dateAndTime).format("dddd, Do MMMM YYYY")}
           </Text>
-          <Text style={styles.attendance}>Masuk</Text>
+          <Text style={styles.attendance}>Present</Text>
         </View>
-        <View style={{ marginStart: 12 }}>
+        {/* <View style={{ marginStart: 12 }}>
           <Button title={"Detail"} />
-        </View>
+        </View> */}
       </View>
     </Card>
   );
