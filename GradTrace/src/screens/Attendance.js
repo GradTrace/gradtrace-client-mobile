@@ -63,7 +63,7 @@ export default function AttendanceScreen({ navigation }) {
 
   const card = ({ item }) => <AttendanceCard item={item} />;
 
-  console.log(attendances, "<<<  attendances");
+  // console.log(attendances, "<<<  attendances");
 
   if (Object.keys(attendances).length === 0) {
     return (

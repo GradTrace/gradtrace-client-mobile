@@ -33,7 +33,7 @@ export default function LoginScreen({ navigation }) {
       setTextPassword("");
       navigation.navigate("AppNavigator");
     } catch (err) {
-      Alert.alert("Sign In Error", err.response.data.message);
+      Alert.alert("Sign in error", err.response.data.message);
     }
   };
 
