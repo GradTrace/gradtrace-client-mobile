@@ -2,11 +2,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import IonIcons from "react-native-vector-icons/Ionicons";
 
-import HomeScreen from "./Home";
 import TasksScreen from "./Tasks";
 import AttendanceScreen from "./Attendance";
 import ProfileScreen from "./Profile";
-// import UploadTaskPage from "./UploadTaskPage";
 
 const Tab = createBottomTabNavigator();
 
@@ -16,26 +14,21 @@ export default function AppNavigator({ navigation }) {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
-          if (route.name === "Home") {
-            iconName = focused ? "home" : "home-outline";
-          } else if (route.name === "Tasks") {
+          if (route.name === "Tasks") {
             iconName = focused ? "file-tray-full" : "file-tray-full-outline";
           } else if (route.name === "Attendance") {
             iconName = focused ? "calendar" : "calendar-outline";
           } else if (route.name === "Profile") {
             iconName = focused ? "person" : "person-outline";
           }
-          // else if (route.name === "Upload") {
-          //   iconName = focused ? "file-tray-full" : "file-tray-full-outline";
-          // }
 
           return <IonIcons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: "black",
         tabBarInactiveTintColor: "grey",
+        headerTitleAlign: "center",
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Tasks" component={TasksScreen} />
       <Tab.Screen name="Attendance" component={AttendanceScreen} />
       <Tab.Screen
@@ -54,7 +47,6 @@ export default function AppNavigator({ navigation }) {
           ),
         }}
       />
-      {/* <Tab.Screen name="Upload" component={UploadTaskPage} /> */}
     </Tab.Navigator>
   );
 }

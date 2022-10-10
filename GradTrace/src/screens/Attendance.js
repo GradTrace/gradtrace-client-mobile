@@ -116,14 +116,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    width: "100%",
   },
   containerStyle: {
-    width: "100%",
     paddingTop: 2,
     paddingBottom: 20,
-    paddingHorizontal: 21,
+    // paddingHorizontal: 21,
   },
   scrollview: {
-    backgroundColor: "lightgrey",
+    backgroundColor: "lightblue",
   },
 });

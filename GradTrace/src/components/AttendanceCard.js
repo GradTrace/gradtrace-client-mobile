@@ -15,9 +15,6 @@ export default function AttendanceCard({ item }) {
           /> */}
         </View>
         <View style={styles.content}>
-          {/* <Text style={styles.date}>
-            {item.dateAndTime.toLocaleDateString("en-US")}
-          </Text> */}
           <Text style={styles.date}>
             {moment(item.dateAndTime).format("dddd, Do MMMM YYYY")}
           </Text>

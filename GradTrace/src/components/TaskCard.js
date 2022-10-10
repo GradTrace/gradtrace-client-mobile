@@ -30,8 +30,6 @@ export default function TaskCard({ item, navigation }) {
     }, [])
   );
 
-  // const StudentId = 1;
-
   let url = "none";
   item.AssignmentGrades.map((el) => {
     if (el.StudentId === StudentId && el.AssignmentId === item.id) {
@@ -39,7 +37,6 @@ export default function TaskCard({ item, navigation }) {
     }
     return url;
   });
-  // console.log(url, "ini TOT");
 
   const goToUpload = () => {
     navigation.navigate("Upload", {
@@ -49,47 +46,48 @@ export default function TaskCard({ item, navigation }) {
     });
   };
 
-  console.log(item, `<< ni hasil item`)
-  const now = new Date().getTime()
-  console.log(now, `<< now ini`)
-  console.log(new Date(item.deadline).getTime(), `<< ini deadline frmat ny`)
+  // console.log(item, `<< ni hasil item`);
+  const now = new Date().getTime();
+  // console.log(now, `<< now ini`);
+  // console.log(new Date(item.deadline).getTime(), `<< ini deadline frmat ny`);
 
   // console.log(accessToken, "ini access token");
 
   return (
     <Card containerStyle={styles.cardContainer}>
-      <View style={styles.card}>
-        <View>
-          <Avatar
-            size={50}
-            source={{
-              uri: item.Course.icon,
-            }}
-          />
-        </View>
-        <View style={styles.content}>
+      {/* <Text style={styles.subject}>{item.Course.name}</Text> */}
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          marginVertical: 8,
+          marginBottom: 12,
+        }}
+      >
+        <Avatar
+          size={60}
+          source={{
+            uri: item.Course.icon,
+          }}
+        />
+        <View style={{ marginStart: 15 }}>
           <Text style={styles.subject}>{item.Course.name}</Text>
           <Text>{item.name}</Text>
+          <Text>{item.description}</Text>
           <Text style={styles.deadline}>
-            Deadline: {moment(item.deadline).format("dddd, Do MMMM YYYY")}
+            Deadline:{" "}
+            <Text style={{ fontWeight: "normal" }}>
+              {moment(item.deadline).format("ddd, Do MMM YYYY")}
+            </Text>
           </Text>
         </View>
-
-        {/* <View style={{ marginStart: 12 }}>
-
-          {item.AssignmentGrades[0].url === "none" ? (
-            <Button title={"Submit"} />
-          ) : (
-            <Text>Submitted</Text>
-          )}
-        </View> */}
-        {/* <Text>{item.AssignmentGrades.url}</Text> */}
-        {now >= new Date(item.deadline).getTime() ? null : <Button title={"submit"} onPress={() => goToUpload()} />}
-
       </View>
+      {now >= new Date(item.deadline).getTime() ? null : (
+        <Button title={"Submit"} onPress={() => goToUpload()} />
+      )}
     </Card>
   );
-
 }
 
 const styles = StyleSheet.create({
@@ -104,6 +102,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2.62,
     elevation: 2,
     marginBottom: 2,
+    marginHorizontal: 25,
   },
   card: {
     flexDirection: "row",
@@ -120,8 +119,10 @@ const styles = StyleSheet.create({
   subject: {
     fontSize: 18,
     fontWeight: "bold",
+    textAlign: "center",
   },
   deadline: {
+    fontWeight: "bold",
     fontSize: 14,
   },
 });
