@@ -72,6 +72,8 @@ export default function UploadTaskPage({ navigation, route }) {
         // Uh-oh, an error occurred!
         console.log(error, `<< ini eror message kalo gagal delet`);
       });
+
+    deletedFile(accessToken);
   };
 
   //HOOKS
@@ -164,6 +166,24 @@ export default function UploadTaskPage({ navigation, route }) {
     }
   };
 
+  // Delete task method
+  const deletedFile = async (access_token) => {
+    try {
+      await axios({
+        method: "PATCH",
+        url: `${url}/students/tasks/${route.params.id}`,
+        headers: {
+          access_token,
+        },
+        data: {
+          url: "none",
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const showToastWithGravityAndOffset = (msg = "") => {
     ToastAndroid.showWithGravityAndOffset(
       msg,
@@ -185,6 +205,7 @@ export default function UploadTaskPage({ navigation, route }) {
         <>
           <Text>Ini IDnya: {route.params.id}</Text>
           <Text>Ini URLnya: {route.params.url}</Text>
+          <Text>Ini Studentnya: {route.params.StudentId}</Text>
           {route.params.url != "none" ? (
             <>
               <Text>Ini filename: {str[1]}</Text>
@@ -194,6 +215,7 @@ export default function UploadTaskPage({ navigation, route }) {
               />
             </>
           ) : null}
+
           <Button onPress={() => pickDocument()} title="Upload File" />
           <Text style={styles.textStyle}>{fileName}</Text>
           <View style={styles.btnContainer}>

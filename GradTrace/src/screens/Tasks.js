@@ -11,7 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function TasksScreen({ navigation, route }) {
   const [accessToken, setAccessToken] = useState("");
-  const [tasks, setTasks] = useState({});
+  const [tasks, setTasks] = useState([]);
 
   const getData = async () => {
     try {
@@ -35,10 +35,6 @@ export default function TasksScreen({ navigation, route }) {
     }, [])
   );
 
-  // useEffect(() => {
-  //   getData();
-  // }, []);
-
   // Get tasks data
   const getTasks = async (access_token) => {
     try {
@@ -51,14 +47,14 @@ export default function TasksScreen({ navigation, route }) {
       });
 
       setTasks(result.data);
-      console.log(result.data, "<< hasil axios");
+      // console.log(result.data, "<< hasil axios");
     } catch (err) {
       console.log(err);
     }
   };
 
   const card = ({ item }) => <TaskCard item={item} navigation={navigation} />;
-  console.log(tasks, "<< ini tasks");
+  // console.log(tasks, "<< ini tasks");
   return (
     <View style={styles.container}>
       {/* <ScrollView
@@ -70,20 +66,19 @@ export default function TasksScreen({ navigation, route }) {
           paddingHorizontal: 19,
         }}
       > */}
-      {/* <TaskCard /> */}
+
       <FlatList
         data={tasks}
         renderItem={card}
         keyExtractor={(item) => item.id}
-        // contentContainerStyle={{
-        //   width: "100%",
-        //   paddingTop: 2,
-        //   paddingBottom: 20,
-        //   paddingHorizontal: 19,
-        // }}
+        contentContainerStyle={{
+          width: "100%",
+          paddingTop: 2,
+          paddingBottom: 20,
+          paddingHorizontal: 19,
+        }}
         style={styles.scrollview}
       />
-      {/* </ScrollView> */}
     </View>
   );
 }

@@ -73,11 +73,11 @@ export default function ScanAttendance({ navigation }) {
         longitude,
       });
 
-      const latitudeSchool = -6.36264; // ini data depok
-      const longitudeSchool = 106.832034; // ini data depok
+      // const latitudeSchool = -6.36264; // ini data depok
+      // const longitudeSchool = 106.832034; // ini data depok
 
-      // const latitudeSchool = -6.2523764; // ini data bintaro
-      // const longitudeSchool = 106.6782908; // ini data bintaro
+      const latitudeSchool = -6.2523764; // ini data bintaro
+      const longitudeSchool = 106.6782908; // ini data bintaro
 
       const limitMax200mLoc = 0.2; //max 200 m
       const resultDistanceInKm = distKM(
