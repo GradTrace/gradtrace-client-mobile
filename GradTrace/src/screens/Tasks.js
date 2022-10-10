@@ -1,4 +1,4 @@
-import { View, StyleSheet, ScrollView, FlatList } from "react-native";
+import { View, StyleSheet, ScrollView, FlatList, Text } from "react-native";
 import { useState, useEffect, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -11,7 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function TasksScreen({ navigation, route }) {
   const [accessToken, setAccessToken] = useState("");
-  const [tasks, setTasks] = useState({});
+  const [tasks, setTasks] = useState([]);
 
   const getData = async () => {
     try {
@@ -59,6 +59,12 @@ export default function TasksScreen({ navigation, route }) {
 
   const card = ({ item }) => <TaskCard item={item} navigation={navigation} />;
   console.log(tasks, "<< ini tasks");
+
+  // bikin state loading sndiri
+  if (tasks.length === 0) {
+    return <Text> No Task </Text>
+  }
+
   return (
     <View style={styles.container}>
       {/* <ScrollView

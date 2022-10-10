@@ -9,6 +9,10 @@ export default function TaskCard({ item, navigation }) {
       url: item.AssignmentGrades[0].url,
     });
   };
+  console.log(item, `<< ni hasil item`)
+  const now = new Date().getTime()
+  console.log(now, `<< now ini`)
+  console.log(new Date(item.deadline).getTime(), `<< ini deadline frmat ny`)
 
   return (
     <Card containerStyle={styles.cardContainer}>
@@ -29,17 +33,19 @@ export default function TaskCard({ item, navigation }) {
           </Text>
         </View>
         {/* <View style={{ marginStart: 12 }}>
-          {item.AssignmentGrades[0].url === "none" ? (
-            <Button title={"Submit"} />
-          ) : (
-            <Text>Submitted</Text>
-          )}
-        </View> */}
+            {item.AssignmentGrades[0].url === "none" ? (
+              <Button title={"Submit"} />
+            ) : (
+              <Text>Submitted</Text>
+            )}
+          </View> */}
         <Text>{item.AssignmentGrades.url}</Text>
-        <Button title={"submit"} onPress={() => goToUpload()} />
+        {now >= new Date(item.deadline).getTime() ? null : <Button title={"submit"} onPress={() => goToUpload()} />}
+
       </View>
     </Card>
   );
+
 }
 
 const styles = StyleSheet.create({
