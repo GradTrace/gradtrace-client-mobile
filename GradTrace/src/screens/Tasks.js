@@ -59,7 +59,7 @@ export default function TasksScreen({ navigation, route }) {
 
   // bikin state loading sndiri
   if (tasks.length === 0) {
-    return <Text> No Task </Text>
+    return <Text> No Task </Text>;
   }
 
   // console.log(tasks, "<< ini tasks");
@@ -100,6 +100,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   scrollview: {
-    backgroundColor: "lightgrey",
+    backgroundColor: "lightblue",
   },
 });
