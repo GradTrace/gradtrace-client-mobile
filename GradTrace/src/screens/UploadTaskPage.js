@@ -12,7 +12,12 @@ import { useState, useEffect } from "react";
 import { LogBox } from "react-native";
 import SuccessScreen from "../components/successScreen";
 
-import { ref, getDownloadURL, uploadBytesResumable, deleteObject } from "firebase/storage";
+import {
+  ref,
+  getDownloadURL,
+  uploadBytesResumable,
+  deleteObject,
+} from "firebase/storage";
 import { storage } from "../../Core/config";
 
 import axios from "axios";
@@ -58,15 +63,16 @@ export default function UploadTaskPage({ navigation, route }) {
     const desertRef = ref(storage, `myDocs/${fileNameFirebase}`);
 
     // Delete the file
-    deleteObject(desertRef).then(() => {
-      // File deleted successfully
-      console.log(`ini masok ke berhasil delet`)
-    }).catch((error) => {
-      // Uh-oh, an error occurred!
-      console.log(error, `<< ini eror message kalo gagal delet`)
-    });
-
-  }
+    deleteObject(desertRef)
+      .then(() => {
+        // File deleted successfully
+        console.log(`ini masok ke berhasil delet`);
+      })
+      .catch((error) => {
+        // Uh-oh, an error occurred!
+        console.log(error, `<< ini eror message kalo gagal delet`);
+      });
+  };
 
   //HOOKS
   useEffect(() => {
@@ -103,7 +109,9 @@ export default function UploadTaskPage({ navigation, route }) {
 
       uploadFileToFirebase(blobFile, fileName, isUploadCompleted);
 
-      seturlfirebasegained(uploadFileToFirebase(blobFile, fileName, isUploadCompleted));
+      seturlfirebasegained(
+        uploadFileToFirebase(blobFile, fileName, isUploadCompleted)
+      );
 
       clearFiles();
     }
@@ -166,6 +174,9 @@ export default function UploadTaskPage({ navigation, route }) {
     );
   };
 
+  // Format file name
+  const str = route.params.url.match(new RegExp("/myDocs%2F([^?]+)"));
+
   return (
     <View style={styles.container}>
       {uploadStart ? (
@@ -173,7 +184,16 @@ export default function UploadTaskPage({ navigation, route }) {
       ) : (
         <>
           <Text>Ini IDnya: {route.params.id}</Text>
-          <Button onPress={() => deleteFileFromFirebase('1601376263809.jpg')} title="Delete File" />
+          <Text>Ini URLnya: {route.params.url}</Text>
+          {route.params.url != "none" ? (
+            <>
+              <Text>Ini filename: {str[1]}</Text>
+              <Button
+                onPress={() => deleteFileFromFirebase(`${str[1]}`)}
+                title="Delete File"
+              />
+            </>
+          ) : null}
           <Button onPress={() => pickDocument()} title="Upload File" />
           <Text style={styles.textStyle}>{fileName}</Text>
           <View style={styles.btnContainer}>
