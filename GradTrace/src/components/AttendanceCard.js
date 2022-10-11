@@ -1,28 +1,17 @@
 import { StyleSheet, View } from "react-native";
-import { Text, Card, Button, Avatar } from "@rneui/themed";
+import { Text, Card } from "@rneui/themed";
 import moment from "moment";
 
 export default function AttendanceCard({ item }) {
   return (
     <Card containerStyle={styles.cardContainer}>
       <View style={styles.card}>
-        <View>
-          {/* <Avatar
-            size={50}
-            source={{
-              uri: "https://cdn-icons-png.flaticon.com/512/591/591576.png",
-            }}
-          /> */}
-        </View>
         <View style={styles.content}>
           <Text style={styles.date}>
             {moment(item.dateAndTime).format("dddd, Do MMMM YYYY")}
           </Text>
           <Text style={styles.attendance}>Present</Text>
         </View>
-        {/* <View style={{ marginStart: 12 }}>
-          <Button title={"Detail"} />
-        </View> */}
       </View>
     </Card>
   );
