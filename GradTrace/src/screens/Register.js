@@ -76,7 +76,6 @@ export default function RegisterScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* <Image source={logo} style={styles.logo} /> */}
       <Text
         style={{
           fontSize: 20,

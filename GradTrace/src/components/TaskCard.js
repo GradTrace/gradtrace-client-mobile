@@ -46,16 +46,10 @@ export default function TaskCard({ item, navigation }) {
     });
   };
 
-  // console.log(item, `<< ni hasil item`);
   const now = new Date().getTime();
-  // console.log(now, `<< now ini`);
-  // console.log(new Date(item.deadline).getTime(), `<< ini deadline frmat ny`);
-
-  // console.log(accessToken, "ini access token");
 
   return (
     <Card containerStyle={styles.cardContainer}>
-      {/* <Text style={styles.subject}>{item.Course.name}</Text> */}
       <View
         style={{
           flexDirection: "row",

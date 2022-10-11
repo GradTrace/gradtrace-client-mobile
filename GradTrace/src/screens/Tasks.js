@@ -5,9 +5,8 @@ import {
   Text,
   ActivityIndicator,
 } from "react-native";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import { Chip } from "react-native-elements";
 
 import TaskCard from "../components/TaskCard";
 
@@ -19,19 +18,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function TasksScreen({ navigation, route }) {
   const [accessToken, setAccessToken] = useState("");
   const [tasks, setTasks] = useState([]);
-
-  // const [search, setSearch] = useState("");
-  // const [filteredDataSource, setFilteredDataSource] = useState([]);
-  // const [masterDataSource, setMasterDataSource] = useState([]);
-
   const [isLoading, setIsLoading] = useState(false);
-
-  // course
-  const courses = [
-    { id: 1, name: "Biology" },
-    { id: 2, name: "Math" },
-    { id: 3, name: "English" },
-  ];
 
   // Get access token and get tasks
   const getData = async () => {
@@ -71,8 +58,6 @@ export default function TasksScreen({ navigation, route }) {
       });
 
       setTasks(result.data);
-      // setFilteredDataSource(result.data);
-      // setMasterDataSource(result.data);
     } catch (err) {
       console.log(err);
     }
@@ -81,28 +66,17 @@ export default function TasksScreen({ navigation, route }) {
   // Card to be rendered
   const card = ({ item }) => <TaskCard item={item} navigation={navigation} />;
 
-  // Course filter
-  const chip = ({ item }) => <Chip title={item.name} />;
-
-  // const filterFunction = (text) => {
-  //   if (text) {
-  //     console.log(text, "masukk");
-  //     // const newData = masterDataSource.filter(function (item) {
-  //     //   const itemData = item.title
-  //     //     ? item.title.toUpperCase()
-  //     //     : "".toUpperCase();
-  //     //   const textData = text.toUpperCase();
-  //     //   return itemData.indexOf(textData) > -1;
-  //     // });
-  //   } else {
-  //     // setFilteredDataSource(masterDataSource);
-  //     // setSearch(text);
-  //   }
-  // };
-
+  // Loading screen
   if (isLoading) {
     return (
-      <View style={styles.container}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignContent: "center",
+          backgroundColor: "lightblue",
+        }}
+      >
         <ActivityIndicator size="large" color="black" />
       </View>
     );
@@ -110,13 +84,6 @@ export default function TasksScreen({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={courses}
-        keyExtractor={(item) => item.id}
-        renderItem={chip}
-        horizontal={true}
-      />
-
       <FlatList
         data={tasks}
         renderItem={card}

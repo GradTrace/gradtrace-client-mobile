@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, FlatList } from "react-native";
+import { View, StyleSheet, ActivityIndicator, FlatList } from "react-native";
 import { Button } from "@rneui/themed";
 import { useState, useEffect, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
@@ -17,35 +17,37 @@ export default function AttendanceScreen({ navigation }) {
 
   const [accessToken, setAccessToken] = useState("");
   const [attendances, setAttendances] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
+  // Get access token and get student attendances
   const getData = async () => {
     try {
+      setIsLoading(true);
       const jsonValue = await AsyncStorage.getItem("@storage_Key");
 
       if (jsonValue) {
         const result = JSON.parse(jsonValue);
         setAccessToken(result.access_token);
         getAttendances(result.access_token);
+        setIsLoading(false);
       } else {
-        console.log("error");
+        Alert.alert("Error", err);
+        console.log("Error set access_token");
       }
     } catch (err) {
+      setIsLoading(false);
+      Alert.alert("Error", err);
       console.log(err);
     }
   };
 
-  // useEffect(() => {
-  //   getData();
-  // }, []);
-
-  // Pakai useFocusEffect untuk "melakukan useEffect" saat terjadi perpindahan screen (atau dalam kata lain pindah dari focused screen jadi unfocused screen)
   useFocusEffect(
     useCallback(() => {
       getData();
     }, [])
   );
 
-  // Get attendance data
+  // Get attendance data function
   const getAttendances = async (access_token) => {
     try {
       const result = await axios({
@@ -57,20 +59,43 @@ export default function AttendanceScreen({ navigation }) {
       });
       setAttendances(result.data);
     } catch (err) {
+      Alert.alert("Error", err);
       console.log(err);
     }
   };
 
+  // Card to be rendered
   const card = ({ item }) => <AttendanceCard item={item} />;
 
-  // console.log(attendances, "<<<  attendances");
+  // Loading screen
+  if (isLoading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignContent: "center",
+          backgroundColor: "lightblue",
+        }}
+      >
+        <ActivityIndicator size="large" color="black" />
+      </View>
+    );
+  }
 
   if (Object.keys(attendances).length === 0) {
     return (
       <>
-        <View style={styles.top}>
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "lightblue",
+          }}
+        >
           <Button
-            title="Scan QR"
+            title="+ New Absence"
             onPress={goToAttendanceScan}
             style={styles.scanButton}
           />
@@ -82,7 +107,7 @@ export default function AttendanceScreen({ navigation }) {
       <>
         <View style={styles.top}>
           <Button
-            title="Scan QR"
+            title="+ New Absence"
             onPress={goToAttendanceScan}
             style={styles.scanButton}
           />
@@ -103,25 +128,23 @@ export default function AttendanceScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   top: {
-    flex: 1,
-    alignItems: "center",
+    flex: 1.5,
+    alignItems: "flex-end",
     justifyContent: "center",
+    paddingRight: 10,
+    backgroundColor: "lightblue",
   },
   scanButton: {
-    // flexDirection: "row-reverse",
-    // marginStart: 200,
+    marginStart: 50,
   },
   container: {
     flex: 15,
     backgroundColor: "#fff",
-    // alignItems: "center",
-    // justifyContent: "center",
     width: "100%",
   },
   containerStyle: {
-    paddingTop: 2,
+    paddingTop: 0,
     paddingBottom: 20,
-    // paddingHorizontal: 21,
   },
   scrollview: {
     backgroundColor: "lightblue",

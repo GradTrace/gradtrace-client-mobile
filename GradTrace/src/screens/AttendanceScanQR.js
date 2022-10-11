@@ -6,8 +6,6 @@ import { Button } from "@rneui/themed";
 import * as Location from "expo-location";
 
 import axios from "axios";
-// const url = "http://localhost:3000/students/attendance";
-// const url = "https://a3d2-111-94-112-45.ap.ngrok.io/students/attendance"; // link dinamis, tolong disesuaikan sama ngrok di masing2 pc (pastikan ngrok tetap running)
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { distKM } from "../../helpers/calculateRadiusRange";
@@ -22,24 +20,19 @@ export default function ScanAttendance({ navigation }) {
   const [userLocation, setUserLocation] = useState("");
   const [errorMsg, setErrorMsg] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [text, setText] = useState("Not yet scanned");
+  const [text, setText] = useState("Not ready");
   const [location, setLocation] = useState({});
 
   // Get access_token
   const getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("@storage_Key");
-      // console.log(jsonValue, "<<< ini hasil get access token");
 
       if (jsonValue) {
         const result = JSON.parse(jsonValue);
-        // console.log(result, "<<< ini hasil Get Data di home");
         setAccessToken(result.access_token);
-
-        // return result;
       } else {
         console.log("error");
-        // return null;
       }
     } catch (err) {
       console.log(err);
@@ -50,17 +43,12 @@ export default function ScanAttendance({ navigation }) {
     getData();
   }, []);
 
-  // console.log(accessToken, "<< access token");
-
-  //! cari cara agar bisa langsung scan qr lagi saat berubah dari nonaktif ke aktif
-
   // Get current location
   async function GetCurrentLocation() {
     let { status } = await Location.requestForegroundPermissionsAsync();
 
     if (status !== "granted") {
       setErrorMsg("Permission to access location was denied");
-      // console.log("Please activate yor location");
       return;
     }
 
@@ -97,22 +85,15 @@ export default function ScanAttendance({ navigation }) {
         lon: longitude,
         lat: latitude,
       }));
-      // console.log(location);
 
-      for (let item of response) {
-        const address = `${item.name}, ${item.street}, ${item.postalCode}, ${item.district}, ${item.city}, ${item.subregion}, ${item.region}, ${item.country}  Lat: ${latitude}, Long: ${longitude}, `;
+      setText("Ready to scan new attendance");
 
-        setUserLocation(address);
-        // console.log(address);
-      }
+      // for (let item of response) {
+      //   const address = `${item.name}, ${item.street}, ${item.postalCode}, ${item.district}, ${item.city}, ${item.subregion}, ${item.region}, ${item.country}  Lat: ${latitude}, Long: ${longitude}, `;
+
+      //   setUserLocation(address);
+      // }
     }
-  }
-
-  let textLocation = "Waiting..";
-  if (errorMsg) {
-    textLocation = errorMsg;
-  } else if (userLocation) {
-    textLocation = JSON.stringify(userLocation);
   }
 
   // QR scan
@@ -129,10 +110,7 @@ export default function ScanAttendance({ navigation }) {
   }, []);
 
   const handleBarCodeScanned = ({ type, data }) => {
-    console.log(`Type: ${type}, Data: ${data}`);
-
     setScanned(true);
-    setText(data);
     postAttendance(data);
   };
 
@@ -159,7 +137,6 @@ export default function ScanAttendance({ navigation }) {
   // Post attendance
   async function postAttendance(data) {
     try {
-      console.log(accessToken, "Ini access token dari post new attendance");
       const result = await axios({
         method: "POST",
         url: data,
@@ -172,10 +149,8 @@ export default function ScanAttendance({ navigation }) {
           lat: location.lat,
         },
       });
-      console.log(result.data, "ini hasil");
       navigation.navigate("Attendance");
     } catch (err) {
-      console.log(err, "Error from post attendance");
       Alert.alert("Error", err.response.data.message);
     }
   }
@@ -183,6 +158,7 @@ export default function ScanAttendance({ navigation }) {
   return (
     <View style={styles.container}>
       <Button title={"Back"} onPress={goToAttendance} />
+      <View style={{ marginBottom: 10 }}></View>
       <View style={styles.barcodebox}>
         <BarCodeScanner
           onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
@@ -195,12 +171,12 @@ export default function ScanAttendance({ navigation }) {
         <Button title={"Tap to Scan Again"} onPress={() => setScanned(false)} />
       )}
 
-      {location && (
+      {/* {location && (
         <Text>
           My current location = lon: {location.lon} lat: {location.lat}
         </Text>
-      )}
-      <Text>{textLocation}</Text>
+      )} */}
+      {/* <Text>{textLocation}</Text> */}
     </View>
   );
 }
@@ -213,7 +189,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 15,
-    backgroundColor: "#fff",
+    backgroundColor: "#lightblue",
     alignItems: "center",
     justifyContent: "center",
   },
