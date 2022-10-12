@@ -1,4 +1,12 @@
-import { View, StyleSheet, ActivityIndicator, FlatList } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import { Button } from "@rneui/themed";
 import { useState, useEffect, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
@@ -85,33 +93,29 @@ export default function AttendanceScreen({ navigation }) {
 
   if (Object.keys(attendances).length === 0) {
     return (
-      <>
-        <View
-          style={{
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "lightblue",
-          }}
-        >
-          <Button
-            title="+ New Absence"
+      <View style={styles.emptyAttendanceContainer}>
+        <View style={{ flexDirection: "column", alignItems: "center" }}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={styles.touchableOpacityStyle}
             onPress={goToAttendanceScan}
-            style={styles.scanButton}
-          />
+          >
+            <Image
+              source={{
+                uri: "https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png",
+              }}
+              style={styles.centerAddButton}
+            />
+          </TouchableOpacity>
+          <Text style={{ marginTop: 10, fontSize: 18 }}>
+            Tap to add new absence
+          </Text>
         </View>
-      </>
+      </View>
     );
   } else {
     return (
       <>
-        <View style={styles.top}>
-          <Button
-            title="+ New Absence"
-            onPress={goToAttendanceScan}
-            style={styles.scanButton}
-          />
-        </View>
         <View style={styles.container}>
           <FlatList
             data={attendances}
@@ -120,6 +124,19 @@ export default function AttendanceScreen({ navigation }) {
             style={styles.scrollview}
             contentContainerStyle={styles.containerStyle}
           />
+
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={styles.touchableOpacityStyle}
+            onPressOut={goToAttendanceScan}
+          >
+            <Image
+              source={{
+                uri: "https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png",
+              }}
+              style={styles.floatingButtonStyle}
+            />
+          </TouchableOpacity>
         </View>
       </>
     );
@@ -127,20 +144,23 @@ export default function AttendanceScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  top: {
-    flex: 1.5,
-    alignItems: "flex-end",
-    justifyContent: "center",
-    paddingRight: 10,
-    backgroundColor: "lightblue",
-  },
-  scanButton: {
-    marginStart: 50,
-  },
   container: {
-    flex: 15,
+    flex: 1,
     backgroundColor: "#fff",
     width: "100%",
+  },
+  emptyAttendanceContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "lightblue",
+  },
+  centerAddButton: {
+    borderColor: "rgba(0,0,0,0.2)",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 50,
+    height: 50,
   },
   containerStyle: {
     paddingTop: 0,
@@ -148,5 +168,14 @@ const styles = StyleSheet.create({
   },
   scrollview: {
     backgroundColor: "lightblue",
+  },
+  floatingButtonStyle: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: 50,
+    height: 50,
+    position: "absolute",
+    bottom: 12,
+    right: 12,
   },
 });

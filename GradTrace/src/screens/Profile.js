@@ -100,7 +100,7 @@ export default function ProfileScreen({ navigation }) {
   // Card to be rendered
   const card = ({ item }) => <ScoreCard item={item} />;
 
-  console.log(examScores);
+  // console.log(examScores);
   return (
     <View style={styles.topContent}>
       <View style={styles.topContentContainer}>

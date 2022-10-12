@@ -32,15 +32,11 @@ const styles = StyleSheet.create({
   },
   card: {
     flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    alignItems: "center",
-    marginHorizontal: "auto",
   },
   content: {
     flexDirection: "column",
     justifyContent: "center",
-    marginStart: 12,
+    marginStart: 5,
   },
   date: {
     fontSize: 18,
