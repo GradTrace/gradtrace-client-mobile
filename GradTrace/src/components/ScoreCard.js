@@ -13,14 +13,20 @@ export default function ScoreCard({ item }) {
           return (
             <Text key={i} style={styles.scores}>
               {el.name} :{"  "}
-              {+el.score.toFixed(2) > 75 ? (
-                <Text style={{ fontWeight: "normal" }}>
-                  {+el.score.toFixed(2)}
-                </Text>
+              {!el.score ? (
+                <Text>0</Text>
               ) : (
-                <Text style={{ fontWeight: "normal", color: "red" }}>
-                  {+el.score.toFixed(2)}
-                </Text>
+                <>
+                  {+el.score.toFixed(2) > 75 ? (
+                    <Text style={{ fontWeight: "normal" }}>
+                      {+el.score.toFixed(2)}
+                    </Text>
+                  ) : (
+                    <Text style={{ fontWeight: "normal", color: "red" }}>
+                      {+el.score.toFixed(2)}
+                    </Text>
+                  )}
+                </>
               )}
             </Text>
           );
