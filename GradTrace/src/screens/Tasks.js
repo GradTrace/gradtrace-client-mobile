@@ -8,9 +8,7 @@ import {
 } from "react-native";
 import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-
 import TaskCard from "../components/TaskCard";
-
 import { url } from "../../constants/url";
 
 import axios from "axios";

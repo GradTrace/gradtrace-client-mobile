@@ -28,11 +28,7 @@ export default function App() {
           component={ScanAttendance}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="Upload"
-          component={UploadTaskPage}
-          // options={{ headerShown: false }}
-        />
+        <Stack.Screen name="Upload" component={UploadTaskPage} />
         <Stack.Screen
           name="AppNavigator"
           component={AppNavigator}
