@@ -101,7 +101,7 @@ export default function AttendanceScreen({ navigation }) {
           >
             <Image
               source={{
-                uri: "https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png",
+                uri: "https://cdn-icons-png.flaticon.com/512/753/753317.png",
               }}
               style={styles.centerAddButton}
             />
@@ -131,7 +131,7 @@ export default function AttendanceScreen({ navigation }) {
           >
             <Image
               source={{
-                uri: "https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png",
+                uri: "https://cdn-icons-png.flaticon.com/512/753/753317.png",
               }}
               style={styles.floatingButtonStyle}
             />

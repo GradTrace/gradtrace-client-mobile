@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     fontSize: 16,
+    backgroundColor: "rgba(243,243,245,0.7)",
   },
   logo: {
     width: 340,

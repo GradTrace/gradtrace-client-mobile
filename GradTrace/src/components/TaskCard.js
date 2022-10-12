@@ -122,13 +122,13 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "center",
-    alignItems: "center",
+    // justifyContent: "center",
+    // alignItems: "center",
     marginHorizontal: "auto",
   },
   content: {
     flexDirection: "column",
-    justifyContent: "center",
+    // justifyContent: "center",
     marginStart: 12,
   },
   subject: {
