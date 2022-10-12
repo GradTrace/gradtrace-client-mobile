@@ -5,15 +5,13 @@ export default function ScoreCard({ item }) {
   return (
     <Card containerStyle={styles.cardContainer}>
       <View>
-        <Text style={{ fontWeight: "bold", color: "red" }}>
-          Nilai tugas belum masuk
-        </Text>
-        <Text>Course: {item[0].course}</Text>
-        <Text>End semester exam: {item[0].score}</Text>
-        <Text>Mid semester exam : {item[1].score}</Text>
-        <Text>Exam 1 : {item[2].score}</Text>
-        <Text>Exam 2 : {item[3].score}</Text>
-        <Text>Final score : {item[4].score}</Text>
+
+
+        <Text>Course: {item.scores[0].course}</Text>
+        {item.scores.map((el, i) => {
+          return <Text key={i}> {el.name}: {+el.score.toFixed(2)}</Text>
+        }
+        )}
       </View>
     </Card>
   );
@@ -21,8 +19,8 @@ export default function ScoreCard({ item }) {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    borderRadius: 10,
-    shadowColor: "#000",
+    borderRadius: 1,
+    shadowColor: "#item00",
     shadowOffset: {
       width: 0,
       height: 2,
