@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { View, StyleSheet, Text, Alert } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Alert,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 
 import { Button } from "@rneui/themed";
 import * as Location from "expo-location";
@@ -157,39 +164,39 @@ export default function ScanAttendance({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Button title={"Back"} onPress={goToAttendance} />
-      <View style={{ marginBottom: 10 }}></View>
-      <View style={styles.barcodebox}>
-        <BarCodeScanner
-          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-          style={{ width: 550, height: 550 }}
-        />
+      <View style={{ flexDirection: "column" }}>
+        <View style={{ flexDirection: "row-reverse" }}>
+          <Text> </Text>
+          <TouchableOpacity activeOpacity={0.5} onPressOut={goToAttendance}>
+            <Image
+              source={{
+                uri: "https://cdn-icons-png.flaticon.com/512/1828/1828665.png",
+              }}
+              style={styles.floatingButtonStyle}
+            />
+          </TouchableOpacity>
+        </View>
+
+        <View>
+          <View style={{ marginBottom: 10 }}></View>
+          <View style={styles.barcodebox}>
+            <BarCodeScanner
+              onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+              style={{ width: 550, height: 550 }}
+            />
+          </View>
+        </View>
       </View>
+
       <Text style={styles.mainText}>{text}</Text>
-
-      {scanned && (
-        <Button title={"Tap to Scan Again"} onPress={() => setScanned(false)} />
-      )}
-
-      {/* {location && (
-        <Text>
-          My current location = lon: {location.lon} lat: {location.lat}
-        </Text>
-      )} */}
-      {/* <Text>{textLocation}</Text> */}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  top: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   container: {
-    flex: 15,
-    backgroundColor: "#lightblue",
+    flex: 1,
+    backgroundColor: "lightblue",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -205,5 +212,11 @@ const styles = StyleSheet.create({
   mainText: {
     fontSize: 16,
     margin: 20,
+  },
+  floatingButtonStyle: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: 25,
+    height: 25,
   },
 });
