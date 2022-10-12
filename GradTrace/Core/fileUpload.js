@@ -3,8 +3,8 @@ import { storage } from "./config";
 
 export const UploadFile = (blobFile, fileName, isUploadCompleted) => {
   if (!blobFile) return;
-  const sotrageRef = ref(storage, `myDocs/${fileName}`);
-  const uploadTask = uploadBytesResumable(sotrageRef, blobFile);
+  const storageRef = ref(storage, `myDocs/${fileName}`);
+  const uploadTask = uploadBytesResumable(storageRef, blobFile);
 
   uploadTask.on(
     "state_changed",

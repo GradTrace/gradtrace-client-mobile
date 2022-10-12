@@ -4,13 +4,16 @@ import {
   TouchableOpacity,
   View,
   ToastAndroid,
-  Button,
+  Linking,
 } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
 import { useState, useEffect } from "react";
 import { LogBox } from "react-native";
+import { Button } from "@rneui/themed";
 import SuccessScreen from "../components/successScreen";
+
+import { useNavigation } from "@react-navigation/native";
 
 import {
   ref,
@@ -59,21 +62,22 @@ export default function UploadTaskPage({ navigation, route }) {
 
   const deleteFileFromFirebase = (fileNameFirebase) => {
     // Create a reference to the file to delete
-
     const desertRef = ref(storage, `myDocs/${fileNameFirebase}`);
 
     // Delete the file
+    // setFileName("No Files");
+    // navigation.setParams({ url: "none" });
+
     deleteObject(desertRef)
       .then(() => {
         // File deleted successfully
         console.log(`ini masok ke berhasil delet`);
+        deletedFile(accessToken);
       })
       .catch((error) => {
         // Uh-oh, an error occurred!
         console.log(error, `<< ini eror message kalo gagal delet`);
       });
-
-    deletedFile(accessToken);
   };
 
   //HOOKS
@@ -126,7 +130,6 @@ export default function UploadTaskPage({ navigation, route }) {
     }
   }, [urlfirebasegained]);
 
-  // console.log(urlfirebasegained, "<<< ini hasil URL");
   // GET ACCESS TOKEN
   const getData = async () => {
     try {
@@ -168,6 +171,7 @@ export default function UploadTaskPage({ navigation, route }) {
 
   // Delete task method
   const deletedFile = async (access_token) => {
+    // setFileName("No Files");
     try {
       await axios({
         method: "PATCH",
@@ -179,6 +183,8 @@ export default function UploadTaskPage({ navigation, route }) {
           url: "none",
         },
       });
+
+      navigation.setParams({ url: "none" });
     } catch (err) {
       console.log(err);
     }
@@ -203,37 +209,62 @@ export default function UploadTaskPage({ navigation, route }) {
         <SuccessScreen uploaded={uploadCompleted} />
       ) : (
         <>
-          <Text>Ini IDnya: {route.params.id}</Text>
-          <Text>Ini URLnya: {route.params.url}</Text>
-          <Text>Ini Studentnya: {route.params.StudentId}</Text>
+          {/* <Text>Ini IDnya: {route.params.id}</Text> */}
+          {/* <Text>Ini URLnya: {route.params.url}</Text> */}
+
+          {/* Student can delete the old assignment and update it with the new one */}
           {route.params.url != "none" ? (
-            <>
-              <Text>Ini filename: {str[1]}</Text>
+            <View style={{ alignItems: "center" }}>
+              <Text style={styles.textStyle}>File name:</Text>
+              <Text style={styles.textStyle}>{str[1]}</Text>
+              <Button
+                title={"View file"}
+                onPress={() => Linking.openURL(`${route.params.url}`)}
+                buttonStyle={{
+                  borderRadius: 10,
+                  marginTop: 10,
+                }}
+              />
               <Button
                 onPress={() => deleteFileFromFirebase(`${str[1]}`)}
                 title="Delete File"
+                buttonStyle={{
+                  borderRadius: 10,
+                  marginTop: 10,
+                }}
               />
-            </>
-          ) : null}
+            </View>
+          ) : (
+            <View style={{ alignItems: "center" }}>
+              <View style={styles.btnContainer}>
+                <TouchableOpacity onPress={() => pickDocument()}>
+                  <FontAwesome5 name="file-upload" size={50} color="black" />
+                </TouchableOpacity>
+              </View>
 
-          <Button onPress={() => pickDocument()} title="Upload File" />
-          <Text style={styles.textStyle}>{fileName}</Text>
-          <View style={styles.btnContainer}>
-            {isChoosed ? (
-              <TouchableOpacity
-                style={styles.btnStyle}
-                onPress={() => uploadFilePress()}
-              >
-                <Text style={styles.btnTextStyle}>Upload</Text>
-              </TouchableOpacity>
-            ) : (
-              <Text style={styles.textStyle}>Choose a File -- </Text>
-            )}
-
-            <TouchableOpacity onPress={() => pickDocument()}>
-              <FontAwesome5 name="file-upload" size={60} color="black" />
-            </TouchableOpacity>
-          </View>
+              {fileName === "No Files" ? (
+                <Text style={styles.textStyle}>
+                  Click here to upload your assignment
+                </Text>
+              ) : (
+                <>
+                  <Text style={styles.textStyle}>File name:</Text>
+                  <Text style={{ fontSize: 18 }}>{fileName}</Text>
+                  {isChoosed ? (
+                    <View style={{ marginTop: 20 }}>
+                      <Button
+                        title={"Upload"}
+                        onPress={() => uploadFilePress()}
+                        buttonStyle={{
+                          borderRadius: 10,
+                        }}
+                      />
+                    </View>
+                  ) : null}
+                </>
+              )}
+            </View>
+          )}
         </>
       )}
     </View>
@@ -243,12 +274,11 @@ export default function UploadTaskPage({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "lightblue",
     alignItems: "center",
     justifyContent: "center",
   },
   textStyle: {
-    padding: 10,
     fontSize: 18,
   },
   btnStyle: {
@@ -267,5 +297,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 20,
   },
 });
