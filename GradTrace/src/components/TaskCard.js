@@ -1,5 +1,5 @@
-import { StyleSheet, View } from "react-native";
-import { Text, Card, Avatar, Button } from "@rneui/themed";
+import { StyleSheet, View, Text } from "react-native";
+import { Card, Avatar, Button } from "@rneui/themed";
 import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -77,8 +77,29 @@ export default function TaskCard({ item, navigation }) {
           </Text>
         </View>
       </View>
-      {now >= new Date(item.deadline).getTime() ? null : (
-        <Button title={"Submit"} onPress={() => goToUpload()} />
+
+      {/* Show submit button if the deadline hasn't passed */}
+      {now >= new Date(item.deadline).getTime() ? (
+        <Button
+          title={"Deadline is over"}
+          disabled={true}
+          type={"outline"}
+          buttonStyle={{
+            borderRadius: 12,
+          }}
+        />
+      ) : (
+        <Button
+          title={"Detail"}
+          onPress={() => goToUpload()}
+          type={"solid"}
+          buttonStyle={{
+            // backgroundColor: "rgba(90, 154, 230, 1)",
+            borderColor: "transparent",
+            borderWidth: 0,
+            borderRadius: 12,
+          }}
+        />
       )}
     </Card>
   );

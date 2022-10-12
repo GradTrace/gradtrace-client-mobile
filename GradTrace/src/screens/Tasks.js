@@ -91,8 +91,7 @@ export default function TasksScreen({ navigation, route }) {
         contentContainerStyle={{
           width: "100%",
           paddingTop: 2,
-          paddingBottom: 20,
-          paddingHorizontal: 19,
+          paddingBottom: 15,
         }}
         style={styles.scrollview}
       />
