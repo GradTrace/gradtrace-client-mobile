@@ -2,8 +2,9 @@ import {
   View,
   StyleSheet,
   FlatList,
-  Text,
+  Image,
   ActivityIndicator,
+  TextInput,
 } from "react-native";
 import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
@@ -17,7 +18,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function TasksScreen({ navigation, route }) {
   const [accessToken, setAccessToken] = useState("");
+  const [search, setSearch] = useState("");
   const [tasks, setTasks] = useState([]);
+  const [filteredTasks, setFilteredTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   // Get access token and get tasks
@@ -58,8 +61,28 @@ export default function TasksScreen({ navigation, route }) {
       });
 
       setTasks(result.data);
+      setFilteredTasks(result.data);
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  // Check if searched text is not blank
+  const searchFilterFunction = (text) => {
+    if (text) {
+      const newData = tasks.filter(function (item) {
+        const itemData = item.Course.name
+          ? item.Course.name.toUpperCase()
+          : "".toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredTasks(newData);
+      setSearch(text);
+    } else {
+      // If text input is empty
+      setFilteredTasks(tasks);
+      setSearch(text);
     }
   };
 
@@ -84,13 +107,33 @@ export default function TasksScreen({ navigation, route }) {
 
   return (
     <View style={styles.container}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          marginBottom: 10,
+        }}
+      >
+        <Image
+          source={{
+            uri: "https://cdn-icons-png.flaticon.com/512/3905/3905267.png",
+          }}
+          style={{ width: 38, height: 38, marginTop: 12, marginEnd: 6 }}
+        />
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => searchFilterFunction(text)}
+          value={search}
+          placeholder="Search by course..."
+        />
+      </View>
       <FlatList
-        data={tasks}
+        data={filteredTasks}
         renderItem={card}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{
           width: "100%",
-          paddingTop: 2,
           paddingBottom: 15,
         }}
         style={styles.scrollview}
@@ -108,5 +151,17 @@ const styles = StyleSheet.create({
   },
   scrollview: {
     backgroundColor: "lightblue",
+  },
+  input: {
+    height: 50,
+    width: 270,
+    marginTop: 10,
+    borderWidth: 0.75,
+    padding: 10,
+    borderRadius: 10,
+    fontSize: 16,
+    // backgroundColor: "rgba(243,243,245,1)",
+    backgroundColor: "white",
+    borderColor: "darkgrey",
   },
 });
