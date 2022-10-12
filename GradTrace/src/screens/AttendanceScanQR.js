@@ -1,21 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import {
-  View,
-  StyleSheet,
-  Text,
-  Alert,
-  Image,
-  TouchableOpacity,
-} from "react-native";
-
+import { View, StyleSheet, Text, Alert } from "react-native";
 import { Button } from "@rneui/themed";
 import * as Location from "expo-location";
-
 import axios from "axios";
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { distKM } from "../../helpers/calculateRadiusRange";
+import {
+  latitudeSchool,
+  longitudeSchool,
+} from "../../constants/schoolCoordinate";
 
 export default function ScanAttendance({ navigation }) {
   const goToAttendance = () => {
@@ -62,19 +56,11 @@ export default function ScanAttendance({ navigation }) {
     let { coords } = await Location.getCurrentPositionAsync();
     if (coords) {
       const { latitude, longitude } = coords;
-
-      let response = await Location.reverseGeocodeAsync({
+      await Location.reverseGeocodeAsync({
         latitude,
         longitude,
       });
 
-      // const latitudeSchool = -6.36264; // ini data depok
-      // const longitudeSchool = 106.832034; // ini data depok
-
-      const latitudeSchool = -6.2523764; // ini data bintaro
-      const longitudeSchool = 106.6782908; // ini data bintaro
-
-      const limitMax200mLoc = 0.2; //max 200 m
       const resultDistanceInKm = distKM(
         latitudeSchool,
         longitudeSchool,
@@ -82,6 +68,7 @@ export default function ScanAttendance({ navigation }) {
         longitude
       );
 
+      const limitMax200mLoc = 0.2; //max 200 m
       if (resultDistanceInKm > limitMax200mLoc) {
         goToAttendance();
         Alert.alert(`Error`, "You need to get closer to to your school");
@@ -164,19 +151,7 @@ export default function ScanAttendance({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={{ flexDirection: "column" }}>
-        <View style={{ flexDirection: "row-reverse" }}>
-          <Text> </Text>
-          <TouchableOpacity activeOpacity={0.5} onPressOut={goToAttendance}>
-            <Image
-              source={{
-                uri: "https://cdn-icons-png.flaticon.com/512/1828/1828665.png",
-              }}
-              style={styles.floatingButtonStyle}
-            />
-          </TouchableOpacity>
-        </View>
-
+      <View>
         <View>
           <View style={{ marginBottom: 10 }}></View>
           <View style={styles.barcodebox}>
@@ -189,6 +164,12 @@ export default function ScanAttendance({ navigation }) {
       </View>
 
       <Text style={styles.mainText}>{text}</Text>
+      <Button
+        title={"Back"}
+        buttonStyle={{
+          borderRadius: 10,
+        }}
+      />
     </View>
   );
 }
