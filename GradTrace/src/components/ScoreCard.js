@@ -9,7 +9,7 @@ export default function ScoreCard({ item }) {
 
         <Text>Course: {item.scores[0].course}</Text>
         {item.scores.map((el, i) => {
-          return <Text key={i}> {el.name}: {+el.score}</Text>
+          return <Text key={i}> {el.name}: {+el.score.toFixed(2)}</Text>
         }
         )}
       </View>
