@@ -5,7 +5,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
-import { Avatar } from "@rneui/themed";
+import { Avatar, Card } from "@rneui/themed";
 import { useState, useCallback } from "react";
 import { url } from "../../constants/url";
 
@@ -102,8 +102,9 @@ export default function ProfileScreen({ navigation }) {
 
   // console.log(examScores);
   return (
-    <View style={styles.topContent}>
+    <View style={styles.content}>
       <View style={styles.topContentContainer}>
+        {/* <Card containerStyle={styles.cardContainer}> */}
         <Avatar
           size={110}
           rounded
@@ -127,6 +128,7 @@ export default function ProfileScreen({ navigation }) {
           </Text>
           <Text style={styles.email}>Gender: {studentProfile.gender}</Text>
         </View>
+        {/* </Card> */}
       </View>
 
       <View style={styles.bottomContent}>
@@ -141,7 +143,19 @@ export default function ProfileScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  topContent: {
+  cardContainer: {
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 2,
+    marginBottom: 2,
+  },
+  content: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
