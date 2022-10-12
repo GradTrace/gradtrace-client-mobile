@@ -14,7 +14,9 @@ export default function AttendanceCard({ item }) {
         />
         <View style={styles.content}>
           <Text style={styles.date}>
-            {moment(item.dateAndTime).format("dddd, Do MMMM YYYY")}
+            {moment(item.dateAndTime).format("ddd, Do MMM YYYY")}
+            {"  "}|{"  "}
+            {moment(item.dateAndTime).format("hh:mm A")}
           </Text>
           <Text style={styles.attendance}>Present</Text>
         </View>
@@ -42,7 +44,7 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: "column",
     justifyContent: "center",
-    marginStart: 12,
+    marginStart: 15,
   },
   date: {
     fontSize: 18,

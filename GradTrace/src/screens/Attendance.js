@@ -7,8 +7,7 @@ import {
   TouchableOpacity,
   Text,
 } from "react-native";
-import { Button } from "@rneui/themed";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
 import AttendanceCard from "../components/AttendanceCard";
