@@ -5,11 +5,10 @@ export default function ScoreCard({ item }) {
   return (
     <Card containerStyle={styles.cardContainer}>
       <View>
-
-
-        <Text>Course: {item.scores[0].course}</Text>
+        <Card.Title style={styles.courseTitle}>{item.scores[0].course}</Card.Title>
+        <Card.Divider />
         {item.scores.map((el, i) => {
-          return <Text key={i}> {el.name}: {+el.score.toFixed(2)}</Text>
+          return <Text key={i} style={styles.courseScores}> {el.name} : {+el.score.toFixed(2)}</Text>
         }
         )}
       </View>
@@ -31,5 +30,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginHorizontal: 15,
     marginVertical: 5,
+    borderRadius: 20
   },
+  courseTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginVertical: 5,
+  },
+  courseScores: {
+    fontSize: 16,
+    marginVertical: 5,
+  }
 });
