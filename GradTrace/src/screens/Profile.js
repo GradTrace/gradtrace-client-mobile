@@ -5,9 +5,10 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
-import { Avatar, Card } from "@rneui/themed";
+import { Avatar, Card, Chip } from "@rneui/themed";
 import { useState, useCallback } from "react";
 import { url } from "../../constants/url";
+import IonIcons from "react-native-vector-icons/Ionicons";
 
 import ScoreCard from "../components/ScoreCard";
 
@@ -21,7 +22,6 @@ export default function ProfileScreen({ navigation }) {
   const [examScores, setExamScores] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  //! nilai tugas belum di get
   // Get access token, get student profile, get student exam scores
   const getData = async () => {
     try {
@@ -100,36 +100,60 @@ export default function ProfileScreen({ navigation }) {
   // Card to be rendered
   const card = ({ item }) => <ScoreCard item={item} />;
 
-  // console.log(examScores);
   return (
     <View style={styles.content}>
-      <View style={styles.topContentContainer}>
-        {/* <Card containerStyle={styles.cardContainer}> */}
-        <Avatar
-          size={110}
-          rounded
-          title="Profile Picture"
-          source={{
-            uri: studentProfile.photo
-              ? studentProfile.photo
-              : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png",
-          }}
-        />
-        <View style={styles.studentData}>
-          <Text style={styles.name}>{studentProfile.fullName}</Text>
-          <Text style={styles.class}>Class : {studentProfile.className}</Text>
-          <Text style={styles.email}>Email: {studentProfile.email}</Text>
-          <Text style={styles.email}>
-            Address: {studentProfile.address ? studentProfile.address : " -"}
-          </Text>
-          <Text style={styles.email}>
-            Phone number:{" "}
-            {studentProfile.phoneNumber ? studentProfile.phoneNumber : " -"}
-          </Text>
-          <Text style={styles.email}>Gender: {studentProfile.gender}</Text>
+      <Card containerStyle={styles.cardContainer}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Avatar
+            size={110}
+            rounded
+            title="Profile Picture"
+            source={{
+              uri: studentProfile.photo
+                ? studentProfile.photo
+                : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png",
+            }}
+          />
+          <View style={{ marginStart: 8, alignSelf: "auto" }}>
+            <Text style={styles.name}>{studentProfile.fullName}</Text>
+
+            <Chip
+              title={`Class ${studentProfile.className}`}
+              containerStyle={{ marginHorizontal: 20 }}
+            />
+
+            {/* <Text>Class {}</Text> */}
+
+            <View style={styles.itemRow}>
+              <IonIcons name={"mail-outline"} size={22} />
+              <Text style={styles.text}>{studentProfile.email}</Text>
+            </View>
+
+            <View style={styles.itemRow}>
+              <IonIcons name={"home-outline"} size={22} />
+              <Text style={styles.text}>
+                {studentProfile.address ? studentProfile.address : " -"}
+              </Text>
+            </View>
+
+            <View style={styles.itemRow}>
+              <IonIcons name={"call-outline"} size={22} />
+              <Text style={styles.text}>
+                {studentProfile.phoneNumber ? studentProfile.phoneNumber : " -"}
+              </Text>
+            </View>
+
+            <View style={styles.itemRow}>
+              {studentProfile.gender === "Male" ? (
+                <IonIcons name={"male"} size={22} />
+              ) : (
+                <IonIcons name={"female"} size={22} />
+              )}
+              <Text style={styles.text}>{studentProfile.gender}</Text>
+            </View>
+          </View>
         </View>
-        {/* </Card> */}
-      </View>
+      </Card>
 
       <View style={styles.bottomContent}>
         <FlatList
@@ -144,7 +168,7 @@ export default function ProfileScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    borderRadius: 10,
+    borderRadius: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -162,7 +186,7 @@ const styles = StyleSheet.create({
     backgroundColor: "lightblue",
   },
   topContentContainer: {
-    flex: 3.2,
+    flex: 5,
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
@@ -171,21 +195,25 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   name: {
-    fontSize: 22,
+    fontSize: 18,
     marginStart: 20,
     fontWeight: "bold",
   },
-  class: {
+  text: {
     fontSize: 14,
-    marginStart: 20,
+    marginStart: 10,
   },
-  email: {
-    fontSize: 14,
-    marginStart: 20,
-  },
+
   bottomContent: {
     flex: 10,
     backgroundColor: "lightblue",
     width: "100%",
+  },
+  itemRow: {
+    justifyContent: "center",
+    alignItems: "center",
+    // borderColor: "black",
+    // borderWidth: 1,
+    flexDirection: "row",
   },
 });

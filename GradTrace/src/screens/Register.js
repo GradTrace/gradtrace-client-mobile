@@ -117,7 +117,7 @@ export default function RegisterScreen({ navigation }) {
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.title}>Pasword</Text>
+          <Text style={styles.title}>Password</Text>
           <TextInput
             style={styles.input}
             onChangeText={setTextPassword}

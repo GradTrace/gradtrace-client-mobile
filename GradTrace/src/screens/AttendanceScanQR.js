@@ -144,7 +144,9 @@ export default function ScanAttendance({ navigation }) {
         },
       });
       navigation.navigate("Attendance");
+      console.log(data);
     } catch (err) {
+      console.log(err, "<<< err");
       Alert.alert("Error", err.response.data.message);
     }
   }
