@@ -44,6 +44,7 @@ export default function TasksScreen({ navigation, route }) {
   useFocusEffect(
     useCallback(() => {
       getData();
+      setSearch("");
     }, [])
   );
 

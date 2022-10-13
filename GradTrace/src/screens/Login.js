@@ -1,6 +1,7 @@
 import { View, StyleSheet, Text, TextInput, Alert, Image } from "react-native";
 import { Button } from "@rneui/themed";
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -37,6 +38,13 @@ export default function LoginScreen({ navigation }) {
     }
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      setTextEmail("");
+      setTextPassword("");
+    }, [])
+  );
+
   // Store access_token as object
   const storeData = async (value) => {
     try {
@@ -56,6 +64,7 @@ export default function LoginScreen({ navigation }) {
         onChangeText={setTextEmail}
         value={textEmail}
         placeholder="Enter your email"
+        keyboardType="email-address"
       />
       <TextInput
         style={styles.input}

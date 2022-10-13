@@ -1,13 +1,7 @@
-import {
-  View,
-  StyleSheet,
-  Text,
-  TextInput,
-  Alert,
-  ScrollView,
-} from "react-native";
+import { View, StyleSheet, Text, TextInput, Alert } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Button } from "@rneui/themed";
+import { Picker } from "@react-native-picker/picker";
 import { useState } from "react";
 
 import axios from "axios";
@@ -98,12 +92,17 @@ export default function RegisterScreen({ navigation }) {
 
         <View style={styles.inputContainer}>
           <Text style={styles.title}>Class</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setTextClassName}
-            value={textClassName}
-            placeholder="7 or 8 or 9"
-          />
+          <View style={styles.pickerStyle}>
+            <Picker
+              selectedValue={textClassName}
+              onValueChange={(value, index) => setTextClassName(value)}
+            >
+              <Picker.Item label="Select class" enabled={false} />
+              <Picker.Item label="7" value="7" />
+              <Picker.Item label="8" value="8" />
+              <Picker.Item label="9" value="9" />
+            </Picker>
+          </View>
         </View>
 
         <View style={styles.inputContainer}>
@@ -113,6 +112,7 @@ export default function RegisterScreen({ navigation }) {
             onChangeText={setTextEmail}
             value={textEmail}
             placeholder="example@mail.com"
+            keyboardType="email-address"
           />
         </View>
 
@@ -134,6 +134,7 @@ export default function RegisterScreen({ navigation }) {
             onChangeText={setTextPhoto}
             value={textPhoto}
             placeholder="Photo URL"
+            keyboardType="url"
           />
         </View>
 
@@ -158,13 +159,17 @@ export default function RegisterScreen({ navigation }) {
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.title}>Gender</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setTextGender}
-            value={textGender}
-            placeholder="Male or Female"
-          />
+          <Text style={styles.title}>Class</Text>
+          <View style={styles.pickerStyle}>
+            <Picker
+              selectedValue={textGender}
+              onValueChange={(value, index) => setTextGender(value)}
+            >
+              <Picker.Item label="Select gender" enabled={false} />
+              <Picker.Item label="Male" value="Male" />
+              <Picker.Item label="Female" value="Female" />
+            </Picker>
+          </View>
         </View>
 
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
@@ -224,5 +229,14 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     justifyContent: "flex-start",
+  },
+  pickerStyle: {
+    height: 40,
+    borderWidth: 1,
+    borderColor: "black",
+    backgroundColor: "rgba(243,243,245,0.7)",
+    borderRadius: 10,
+    margin: 8,
+    justifyContent: "center",
   },
 });
