@@ -171,6 +171,7 @@ export default function ScanAttendance({ navigation }) {
         buttonStyle={{
           borderRadius: 10,
         }}
+        onPress={() => navigation.navigate("Attendance")}
       />
     </View>
   );

@@ -17,7 +17,7 @@ export default function ScoreCard({ item }) {
                 <Text>0</Text>
               ) : (
                 <>
-                  {+el.score.toFixed(2) > 75 ? (
+                  {+el.score.toFixed(2) > 74.99 ? (
                     <Text style={{ fontWeight: "normal" }}>
                       {+el.score.toFixed(2)}
                     </Text>

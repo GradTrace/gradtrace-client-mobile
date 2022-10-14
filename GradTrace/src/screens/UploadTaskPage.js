@@ -5,6 +5,7 @@ import {
   View,
   ToastAndroid,
   Linking,
+  Alert,
 } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
@@ -12,8 +13,6 @@ import { useState, useEffect } from "react";
 import { LogBox } from "react-native";
 import { Button } from "@rneui/themed";
 import SuccessScreen from "../components/successScreen";
-
-import { useNavigation } from "@react-navigation/native";
 
 import {
   ref,
@@ -203,6 +202,23 @@ export default function UploadTaskPage({ navigation, route }) {
   // Format file name
   const str = route.params.url.match(new RegExp("/myDocs%2F([^?]+)"));
 
+  // Delete confirmation alert
+  const deleteAlert = () => {
+    Alert.alert(
+      "Delete Confirmation",
+      "Are you sure want to delete this file?",
+      [
+        {
+          text: "No",
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: () => deleteFileFromFirebase(`${str[1]}`),
+        },
+      ]
+    );
+  };
   return (
     <View style={styles.container}>
       {uploadStart ? (
@@ -226,7 +242,7 @@ export default function UploadTaskPage({ navigation, route }) {
                 }}
               />
               <Button
-                onPress={() => deleteFileFromFirebase(`${str[1]}`)}
+                onPress={deleteAlert}
                 title="Delete File"
                 buttonStyle={{
                   borderRadius: 10,

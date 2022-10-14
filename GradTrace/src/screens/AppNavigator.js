@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import { StyleSheet, Text, Alert } from "react-native";
 import IonIcons from "react-native-vector-icons/Ionicons";
 
 import TasksScreen from "./Tasks";
@@ -9,6 +9,19 @@ import ProfileScreen from "./Profile";
 const Tab = createBottomTabNavigator();
 
 export default function AppNavigator({ navigation }) {
+  // Sign out alert
+  const signOutAlert = () => {
+    Alert.alert("Sign out", "You can access your account by signing back in", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Sign out",
+        onPress: () => navigation.navigate("Login"),
+      },
+    ]);
+  };
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -36,12 +49,7 @@ export default function AppNavigator({ navigation }) {
         component={ProfileScreen}
         options={{
           headerRight: () => (
-            <Text
-              style={styles.signOut}
-              onPress={() => {
-                navigation.navigate("Login");
-              }}
-            >
+            <Text style={styles.signOut} onPress={signOutAlert}>
               Sign Out
             </Text>
           ),
